@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+  <import resource="applicationContext-base-agent.xml"/>
+
+  <!-- 应用只需要配置一个AppContext -->
+  <bean class="com.yihaodian.architecture.hedwig.provider.AppProfile" name="kiraAppContext">
+    <property name="domainName" value="201-SOA"></property>
+    <!--如果应用部署的Context Path在根路径下，则设置kira.server.serviceAppName为/ ,如果不是部署在根路径下，比如部署的contextPath为/aaa，则设置kira.server.serviceAppName为aaa -->
+    <property name="serviceAppName" value="${kira.server.serviceAppName}"></property>
+    <!-- 如果应用部署的context-path不是/,而是在/serviceAppName下，则设置assembleAppName为true,否则设置assembleAppName为false -->
+    <property name="assembleAppName" value="${kira.server.assembleAppName}"></property>
+    <!-- 与web.xml中servlet-mapping中的url-pattern的值相同 -->
+    <property name="urlPattern" value="remote"></property>
+    <!-- 根据Application server 的端口修改-->
+    <property name="port" value="${kira.server.listen.port}"></property>
+  </bean>
+
+
+  <bean class="com.yihaodian.architecture.kira.client.util.CentralScheduleServiceExporter"
+    name="/centralScheduleService">
+    <property name="appProfile" ref="kiraAppContext"></property>
+  </bean>
+
+</beans>

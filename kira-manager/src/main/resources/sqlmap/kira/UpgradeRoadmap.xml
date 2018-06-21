@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UpgradeRoadmap">
+
+	<resultMap id="upgradeRoadmapResult" type="UpgradeRoadmap">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="create_time" property="createTime"/>
+		<result column="upgrade_details" property="upgradeDetails"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="UpgradeRoadmap">
+		INSERT INTO upgrade_roadmap
+			(id, name, upgrade_details, create_time)
+		VALUES
+			(#{id}, #{name}, #{upgradeDetails}, #{createTime})
+		<selectKey resultType="Long" keyProperty="id">
+           SELECT LAST_INSERT_ID()  
+        </selectKey>			
+	</insert>
+
+	<update id="update" parameterType="UpgradeRoadmap">
+		UPDATE
+			upgrade_roadmap
+		SET
+			name = #{name},
+			upgrade_details = #{upgradeDetails},
+			create_time = #{createTime}
+		WHERE
+			id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM
+			upgrade_roadmap
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<sql id="allColumns">
+			id,
+			name,
+			upgrade_details,
+			create_time
+	</sql>		
+	
+	<select id="select" parameterType="java.lang.Long" resultMap="upgradeRoadmapResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			upgrade_roadmap
+		WHERE
+			id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<if test="name != null and name != ''">
+			WHERE name = #{name}
+		</if>
+	</sql>
+
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == ''">
+			create_time DESC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="UpgradeRoadmapCriteria" resultMap="upgradeRoadmapResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			upgrade_roadmap
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="UpgradeRoadmapCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			upgrade_roadmap
+		<include refid="criteriaWhereClause"/>
+	</select>
+
+</mapper>

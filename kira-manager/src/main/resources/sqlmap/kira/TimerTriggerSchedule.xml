@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TimerTriggerSchedule">
+
+	<resultMap id="timerTriggerScheduleResult" type="TimerTriggerSchedule">
+		<result column="id" property="id" />
+		<result column="app_id" property="appId"/>
+		<result column="trigger_id" property="triggerId"/>
+		<result column="start_time" property="startTime"/>
+		<result column="previous_fire_time" property="previousFireTime"/>
+		<result column="next_fire_time" property="nextFireTime"/>
+		<result column="times_triggered" property="timesTriggered"/>
+		<result column="assigned_server_id" property="assignedServerId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="data_version" property="dataVersion"/>
+	</resultMap>
+	
+	<resultMap id="triggerIdentityResult" type="TriggerIdentity">
+		<result column="app_id" property="appId" />
+		<result column="trigger_id" property="triggerId" />
+	</resultMap>
+	
+	<resultMap id="assignedServerIdAssignedCountMap" type="java.util.HashMap">
+	     <result property="assignedServerId" column="assigned_server_id" javaType="java.lang.String" />  
+	     <result property="assignedCount" column="assigned_count" javaType="java.lang.Integer" />
+	</resultMap>
+
+	<insert id="insert" parameterType="TimerTriggerSchedule">
+		INSERT INTO timer_trigger_schedule
+			(id, app_id, trigger_id, start_time, previous_fire_time, next_fire_time, times_triggered, assigned_server_id, create_time)
+		VALUES
+			(#{id}, #{appId}, #{triggerId}, #{startTime}, #{previousFireTime}, #{nextFireTime}, #{timesTriggered}, #{assignedServerId}, #{createTime})
+		<selectKey resultType="Long" keyProperty="id">
+           SELECT LAST_INSERT_ID()  
+        </selectKey>		
+	</insert>
+
+	<update id="update" parameterType="TimerTriggerSchedule">
+		UPDATE
+			timer_trigger_schedule
+		SET
+			app_id = #{appId},
+			trigger_id = #{triggerId},
+			start_time = #{startTime},
+			previous_fire_time = #{previousFireTime},
+			next_fire_time = #{nextFireTime},
+			times_triggered = #{timesTriggered},
+			assigned_server_id = #{assignedServerId},
+			create_time = #{createTime},
+			data_version = data_version+1
+		WHERE
+			id = #{id}
+		<if test="dataVersion != null and dataVersion != ''">
+			AND data_version = #{dataVersion}
+		</if>
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM
+			timer_trigger_schedule
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<delete id="deleteByCriteria" parameterType="TimerTriggerScheduleCriteria">
+		DELETE FROM
+			timer_trigger_schedule
+		<if test="id != null and id != ''">
+			WHERE id = #{id}
+		</if>
+		<if test="appId != null and appId != ''">
+			AND app_id = #{appId}
+		</if>
+		<if test="triggerId != null and triggerId != ''">
+			AND trigger_id = #{triggerId}
+		</if>
+	</delete>	
+	
+	<sql id="allColumns">
+			id,
+			app_id,
+			trigger_id,
+			start_time,
+			previous_fire_time,
+			next_fire_time,
+			times_triggered,
+			assigned_server_id,
+			create_time,
+			data_version
+	</sql>	
+	
+	<select id="select" parameterType="java.lang.Long" resultMap="timerTriggerScheduleResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			timer_trigger_schedule
+		WHERE
+			id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="id != null and id != ''">
+			 id = #{id}
+		</if>
+		<if test="appId != null and appId != ''">
+			AND app_id = #{appId}
+		</if>
+		<if test="poolIdList != null and poolIdList.size > 0 ">
+			AND app_id in
+			<foreach collection = "poolIdList" index="index" item = "poolIdList" open = "(" close = ")" separator = ",">
+				#{poolIdList}
+			</foreach>
+		</if>
+		<if test="triggerId != null and triggerId != ''">
+			AND trigger_id = #{triggerId}
+		</if>
+		<if test="triggerIdList != null and triggerIdList.size > 0 ">
+			AND  trigger_id in
+			<foreach collection = "triggerIdList" index="index" item = "triggerIdList" open = "(" close = ")" separator = ",">
+				#{triggerIdList}
+			</foreach>
+		</if>
+		<if test="assignedServerId != null and assignedServerId != ''">
+			AND assigned_server_id = #{assignedServerId}
+		</if>
+		<if test="assignedServerIdList != null and assignedServerIdList.size > 0 ">
+			AND assigned_server_id in
+			<foreach collection = "assignedServerIdList" index="index" item ="assignedServerIdList" open = "(" close = ")" separator = ",">
+				#{assignedServerIdList}
+			</foreach>
+		</if>
+		<if test="excludedAssignedServerIdListAndIncludeThoseWithNullAssignedServerId != null and excludedAssignedServerIdListAndIncludeThoseWithNullAssignedServerId.size > 0 ">
+			AND assigned_server_id not in
+			<foreach collection = "excludedAssignedServerIdListAndIncludeThoseWithNullAssignedServerId" index="index" item = "excludedAssignedServerIdListAndIncludeThoseWithNullAssignedServerId" open = "(" close = ")" separator = ",">
+				#{excludedAssignedServerIdListAndIncludeThoseWithNullAssignedServerId}
+			</foreach>
+			or assigned_server_id is null
+		</if>
+		<if test="misfireTimeAsLong != null and misfireTimeAsLong != ''">
+			AND <![CDATA[
+					next_fire_time < #{misfireTimeAsLong}
+				]]>
+		</if>
+		<if test="dataVersion != null and dataVersion != ''">
+			AND data_version = #{dataVersion}
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == ''">
+			create_time DESC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="TimerTriggerScheduleCriteria" resultMap="timerTriggerScheduleResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			timer_trigger_schedule
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+	
+	<select id="listUsingLimit" parameterType="TimerTriggerScheduleCriteria" resultMap="timerTriggerScheduleResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			timer_trigger_schedule
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+		limit #{paging.firstResult}, #{paging.maxResults}
+	</select>	
+
+	<select id="count" parameterType="TimerTriggerScheduleCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			timer_trigger_schedule
+		<include refid="criteriaWhereClause"/>
+	</select>
+	
+	<sql id="getTriggerIdentityListSql">
+		SELECT distinct app_id,trigger_id
+			FROM timer_trigger_schedule
+			<include refid="criteriaWhereClause" />
+
+			order by
+			<if test="orderByClause != null and orderByClause != ''">
+				${orderByClause}
+			</if>
+
+			<if test="orderByClause == null or orderByClause == ''">
+				app_id,trigger_id
+			</if>
+	</sql>
+	
+	<select id="getTriggerIdentityList" parameterType="TimerTriggerScheduleCriteria"
+		resultMap="triggerIdentityResult">
+		<include refid="getTriggerIdentityListSql" />
+	</select>	
+	
+	<update id="updateAssignedServerForTrigger" parameterType="java.util.Map">
+		UPDATE
+			timer_trigger_schedule
+		SET
+			assigned_server_id = #{newAssignedServerId},
+			data_version = data_version+1
+		WHERE
+			app_id = #{appId}
+			AND trigger_id = #{triggerId}
+			<if test="dataVersion != null and dataVersion != ''">
+				AND data_version = #{dataVersion}
+			</if>
+	</update>	
+	
+	<select id="getAssignedServerIdAssignedCountMap" parameterType="java.util.Map" resultMap="assignedServerIdAssignedCountMap">
+		select assigned_server_id, count(*) as assigned_count 
+			from timer_trigger_schedule 
+			where assigned_server_id!='' and assigned_server_id is not null 
+		    <if test ="assignedServerIdList != null and assignedServerIdList.size > 0 ">
+		  	  AND assigned_server_id in
+		      <foreach collection = "assignedServerIdList" index="index" item = "assignedServerIdList" open = "(" close = ")" separator = ",">
+		        #{assignedServerIdList}
+		      </foreach>
+		    </if>
+			group by assigned_server_id
+			order by assigned_Count asc
+	</select>	
+	
+	<select id="getTriggerIdentityListWithinAssignedServerWhichCanBeUnassignedNow" parameterType="java.util.Map" resultMap="triggerIdentityResult">
+		SELECT distinct app_id,trigger_id
+			FROM timer_trigger_schedule
+			<if test="assignedServerId != null and assignedServerId != ''">
+				WHERE assigned_server_id = #{assignedServerId}
+			</if>
+			<if test="minNextFireTimeInMs != null">
+				AND <![CDATA[
+						((next_fire_time >= #{minNextFireTimeInMs}) or (next_fire_time is null))
+					]]>
+			</if>
+		order by IF(ISNULL(next_fire_time),1,0),next_fire_time asc,app_id,trigger_id
+		<if test=" maxCount != null and maxCount != ''">
+			limit 0, #{maxCount}
+		</if>
+	</select>
+	
+	<update id="updateByCriteria" parameterType="java.util.Map">
+		UPDATE
+			timer_trigger_schedule
+		SET
+			app_id = #{timerTriggerSchedule.appId},
+			trigger_id = #{timerTriggerSchedule.triggerId},
+			start_time = #{timerTriggerSchedule.startTime},
+			previous_fire_time = #{timerTriggerSchedule.previousFireTime},
+			next_fire_time = #{timerTriggerSchedule.nextFireTime},
+			times_triggered = #{timerTriggerSchedule.timesTriggered},
+			assigned_server_id = #{timerTriggerSchedule.assignedServerId},
+			create_time = #{timerTriggerSchedule.createTime},
+			data_version = data_version+1
+		<where>
+			<if test="criteria.id != null and criteria.id != ''">
+				 id = #{criteria.id}
+			</if>
+			<if test="criteria.appId != null and criteria.appId != ''">
+				AND  app_id = #{criteria.appId}
+			</if>
+			<if test="criteria.triggerId != null and criteria.triggerId != ''">
+				AND trigger_id = #{criteria.triggerId}
+			</if>
+			<if test="criteria.dataVersion != null and criteria.dataVersion != ''">
+				AND data_version = #{criteria.dataVersion}
+			</if>
+		</where>
+	</update>
+
+</mapper>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="other" namespace="/other" extends="kira-base">
+		<action name="getCurrentServerIp"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getCurrentServerIp">
+		</action>
+		<action name="getKiraZoneContextData"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getKiraZoneContextData">
+		</action>
+		<action name="getChildsUnderTriggersZNode"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getChildsUnderTriggersZNode">
+		</action>
+		<action name="getPoolsZNodeValueUnderTriggersZNode"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getPoolsZNodeValueUnderTriggersZNode">
+		</action>		
+		<action name="getAdminUserNames"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getAdminUserNames">
+		</action>
+		<!--<action name="setAdminUserNames"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setAdminUserNames">-->
+		<!--</action>-->
+		<action name="getPoolValueNeedRectifiedPoolsUnderTriggers"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getPoolValueNeedRectifiedPoolsUnderTriggers">
+		</action>
+		<!--<action name="rectifyValueOfPoolNodesUnderTriggers"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="rectifyValueOfPoolNodesUnderTriggers">-->
+		<!--</action>-->
+		<action name="isNeedArchiveJobRuntimeData"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="isNeedArchiveJobRuntimeData">
+		</action>
+		<!--<action name="setNeedArchiveJobRuntimeData"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setNeedArchiveJobRuntimeData">-->
+		<!--</action>-->
+		<action name="getMinutesToKeepJobRuntimeData"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getMinutesToKeepJobRuntimeData">
+		</action>	
+		<!--<action name="setMinutesToKeepJobRuntimeData"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setMinutesToKeepJobRuntimeData">-->
+		<!--</action>	-->
+		<action name="getMinutesPerTimeToHandleJobRuntimeData"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getMinutesPerTimeToHandleJobRuntimeData">
+		</action>	
+		<!--<action name="setMinutesPerTimeToHandleJobRuntimeData"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setMinutesPerTimeToHandleJobRuntimeData">-->
+		<!--</action>	-->
+		<action name="getSleepTimeBeforeRunNextTaskInMilliseconds"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getSleepTimeBeforeRunNextTaskInMilliseconds">
+		</action>	
+		<!--<action name="setSleepTimeBeforeRunNextTaskInMilliseconds"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setSleepTimeBeforeRunNextTaskInMilliseconds">-->
+		<!--</action>-->
+		<action name="getTimeOutPerTaskInMilliseconds"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getTimeOutPerTaskInMilliseconds">
+		</action>	
+		<!--<action name="setTimeOutPerTaskInMilliseconds"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setTimeOutPerTaskInMilliseconds">-->
+		<!--</action>-->
+		<action name="getPrivateEmails"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getPrivateEmails">
+		</action>
+		<!--<action name="setPrivateEmails"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setPrivateEmails">-->
+		<!--</action>-->
+		<action name="getPrivatePhoneNumbers"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getPrivatePhoneNumbers">
+		</action>
+		<!--<action name="setPrivatePhoneNumbers"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setPrivatePhoneNumbers">-->
+		<!--</action>														-->
+		<action name="getAdminEmails"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getAdminEmails">
+		</action>
+		<!--<action name="setAdminEmails"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setAdminEmails">-->
+		<!--</action>-->
+		<action name="getAdminPhoneNumbers"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getAdminPhoneNumbers">
+		</action>
+		<!--<action name="setAdminPhoneNumbers"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setAdminPhoneNumbers">-->
+		<!--</action>-->
+		<action name="getHealthEventReceiverEmails"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getHealthEventReceiverEmails">
+		</action>
+		<!--<action name="setHealthEventReceiverEmails"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setHealthEventReceiverEmails">-->
+		<!--</action>-->
+		<action name="getHealthEventReceiverPhoneNumbers"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getHealthEventReceiverPhoneNumbers">
+		</action>
+		<!--<action name="setHealthEventReceiverPhoneNumbers"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setHealthEventReceiverPhoneNumbers">-->
+		<!--</action>					-->
+		<action name="getChildsUnderZNnodeFullPath"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getChildsUnderZNnodeFullPath">
+		</action>	
+		<action name="getZNodeValueOfZNnodeFullPath"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getZNodeValueOfZNnodeFullPath">
+		</action>		
+		<action name="getJobTimeoutHandleFailedMaxCount"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getJobTimeoutHandleFailedMaxCount">
+		</action>	
+		<!--<action name="setJobTimeoutHandleFailedMaxCount"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="setJobTimeoutHandleFailedMaxCount">-->
+		<!--</action>-->
+		<action name="getInValidRunningEnvironmentListForTimerTrigger"
+			class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+			method="getInValidRunningEnvironmentListForTimerTrigger">
+		</action>	
+		<!--<action name="cleanInValidEnvironmentsForTimerTrigger"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.OtherAction"-->
+			<!--method="cleanInValidEnvironmentsForTimerTrigger">-->
+		<!--</action>-->
+		<action name="exportTriggersPredictReport"
+				class="com.yihaodian.architecture.kira.manager.action.OtherAction"
+				method="exportTriggersPredictReport">
+		</action>
+	</package>
+</struts>

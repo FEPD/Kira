@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobTimeoutTracker">
+
+	<resultMap id="jobTimeoutTrackerResult" type="JobTimeoutTracker">
+		<result column="id" property="id"/>
+		<result column="create_time" property="createTime"/>
+		<result column="job_id" property="jobId"/>
+		<result column="rum_time_threshold" property="rumTimeThreshold"/>
+		<result column="expect_timeout_time" property="expectTimeoutTime"/>
+		<result column="state" property="state" />
+		<result column="last_update_state_time" property="lastUpdateStateTime"/>
+		<result column="last_update_state_details" property="lastUpdateStateDetails"/>
+		<result column="handle_timeout_failed_count" property="handleTimeoutFailedCount"/>
+		<result column="data_version" property="dataVersion" />
+	</resultMap>
+
+	<insert id="insert" parameterType="JobTimeoutTracker">
+		INSERT INTO job_timeout_tracker
+			(id, create_time, job_id, rum_time_threshold, expect_timeout_time, state, last_update_state_time, last_update_state_details, handle_timeout_failed_count)
+		VALUES
+			(#{id}, #{createTime}, #{jobId}, #{rumTimeThreshold}, #{expectTimeoutTime},
+			#{state}, #{lastUpdateStateTime}, #{lastUpdateStateDetails}, #{handleTimeoutFailedCount})
+	</insert>
+
+	<update id="update" parameterType="JobTimeoutTracker">
+		UPDATE
+			job_timeout_tracker
+		SET
+			create_time = #{createTime},
+			job_id = #{jobId},
+			rum_time_threshold = #{rumTimeThreshold},
+			expect_timeout_time = #{expectTimeoutTime},
+			state = #{state},
+			last_update_state_time = #{lastUpdateStateTime},
+			last_update_state_details = #{lastUpdateStateDetails},
+			handle_timeout_failed_count = #{handleTimeoutFailedCount},
+			data_version = data_version+1
+		WHERE
+			id = #{id}
+		<if test="dataVersion != null and dataVersion != ''">
+			AND data_version = #{dataVersion}
+		</if>
+
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM
+			job_timeout_tracker
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<sql id="allColumns">
+			id,
+			create_time,
+			job_id,
+			rum_time_threshold,
+			expect_timeout_time,
+			state,
+			last_update_state_time,
+			last_update_state_details,
+			handle_timeout_failed_count,
+			data_version
+	</sql>	
+	
+	<select id="select" parameterType="string" resultMap="jobTimeoutTrackerResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			job_timeout_tracker
+		WHERE
+			id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="id != null and id != ''">
+		 	id = #{id}
+		</if>
+		<if test="jobId != null and jobId != ''">
+			AND job_id = #{jobId}
+		</if>
+		<if test="state != null and state != ''">
+			AND state = #{state}
+		</if>
+		<if test="stateList != null and stateList.size > 0 ">
+			AND	state in
+			<foreach collection = "stateList" index="index" item ="stateList" open = "(" close = ")" separator = ",">
+				#{stateList}
+			</foreach>
+		</if>
+		<if test="checkTime != null">
+			AND <![CDATA[
+					expect_timeout_time < #{checkTime}
+				]]>
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		ORDER  BY
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+		<if test="orderByClause == null">
+			create_time 	DESC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="JobTimeoutTrackerCriteria" resultMap="jobTimeoutTrackerResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			job_timeout_tracker
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+	
+	<select id="listUsingLimit" parameterType="JobTimeoutTrackerCriteria" resultMap="jobTimeoutTrackerResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			job_timeout_tracker
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+		limit #{paging.firstResult}, #{paging.maxResults}
+	</select>	
+
+	<select id="count" parameterType="JobTimeoutTrackerCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			job_timeout_tracker
+		<include refid="criteriaWhereClause"/>
+	</select>
+	
+	<select id="createArchiveTableForJobTimeoutTrackerTableIfNeeded" parameterType="map" statementType="STATEMENT">
+			CREATE TABLE IF NOT EXISTS backup_job_timeout_tracker_${newTableNameSuffix} like job_timeout_tracker
+	</select>
+	
+	<sql id="createTimeRangeWhereClause">
+		<where>
+		<if test="startTime != null">
+				  <![CDATA[
+					create_time >= #{startTime}
+				]]>
+			</if>
+			<if test="endTime != null">
+				AND <![CDATA[
+					create_time < #{endTime}
+				]]>
+			</if>
+		</where>
+	</sql>	
+	
+	<insert id="insertDataToJobTimeoutTrackerArchiveTable" parameterType="map">
+		INSERT IGNORE INTO backup_job_timeout_tracker_$newTableNameSuffix$ select * from job_timeout_tracker
+		<include refid="createTimeRangeWhereClause" />
+	</insert>		
+	
+	<delete id="deleteJobTimeoutTrackerData" parameterType="map">
+		DELETE FROM
+		job_timeout_tracker
+			<include refid="createTimeRangeWhereClause" />
+	</delete>		
+	
+	<select id="getDateOfOldestJobTimeoutTracker" resultType="java.util.Date">
+	    SELECT create_time FROM job_timeout_tracker order by create_time limit 1
+	</select>
+	
+	<update id="updateJobTimeoutTrackerState" parameterType="map">
+		  update job_timeout_tracker set state=#{state},last_update_state_time=#{lastUpdateStateTime},
+		last_update_state_details=#{lastUpdateStateDetails},handle_timeout_failed_count=#{handleTimeoutFailedCount},data_version=data_version+1
+		<where>
+		<if test="id != null and id != ''">
+			  id = #{id}
+		</if>
+		<if test="jobId != null and jobId != ''">
+			AND job_id = #{jobId}
+		</if>
+		<if test="stateList != null and stateList.size > 0 ">
+			AND state in
+			<foreach collection = "stateList" index="index" item ="stateList" open = "(" close = ")"  separator = ",">
+				#{stateList}
+			</foreach>
+		</if>
+
+		<if test="dataVersion != null and dataVersion != ''">
+			AND  dataVersion = #{dataVersion}
+		</if>
+		</where>
+	</update>		
+
+</mapper>

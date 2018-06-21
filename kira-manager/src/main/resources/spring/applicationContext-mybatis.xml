@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+	<bean id="jdbcDataSource"
+		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="jdbcDataSource" />
+		<property name="configLocation" value="classpath:sqlmap/sqlmap-mybatis-config.xml"></property>
+	</bean>
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	
+	<!-- Dao -->
+	<bean id="hdcMenuDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.HdcMenuDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+	
+	<bean id="hdcPvgDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.HdcPvgDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+	
+	<bean id="hdcRoleDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.HdcRoleDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	
+	<bean id="hdcUserDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.HdcUserDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<!-- Dao -->
+
+	<bean id="jobDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobDaoImpl" >
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="jobHistoryDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobHistoryDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+
+	<bean id="jobItemDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobItemDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="jobItemHistoryDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobItemHistoryDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="jobStatusDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobStatusDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="triggerMetadataDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.TriggerMetadataDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="operationDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.OperationDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="operationLogDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.OperationLogDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="kiraClientMetadataDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.KiraClientMetadataDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="jobTimeoutTrackerDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobTimeoutTrackerDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="timerTriggerScheduleDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.TimerTriggerScheduleDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="qrtzFiredTriggersDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.QrtzFiredTriggersDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="qrtzSimpleTriggersDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.QrtzSimpleTriggersDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="qrtzTriggersDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.QrtzTriggersDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="upgradeRoadmapDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.UpgradeRoadmapDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+	<bean id="jobRunStatisticsDao" class="com.yihaodian.architecture.kira.manager.dao.mybatis.JobRunStatisticsDaoImpl">
+		<property name="sqlSession" ref="sqlSessionTemplate"></property>
+	</bean>
+
+
+</beans>

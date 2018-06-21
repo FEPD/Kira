@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+	<bean id="dataPreloader"
+		class="com.yihaodian.architecture.kira.manager.util.DataPreloader" init-method="init" destroy-method="destroy" autowire="byName">
+	</bean>
+	
+	<bean id="velocityUtils"
+		class="com.yihaodian.architecture.kira.manager.util.VelocityUtils" init-method="init" destroy-method="destroy" autowire="byName">
+	</bean>	
+	
+	<bean id="asyncDispatcher"
+		class="com.yihaodian.architecture.kira.manager.event.AsyncDispatcher" init-method="init" destroy-method="destroy" autowire="byName">
+	</bean>	
+	
+	<bean id="alarmHelper"
+		class="com.yihaodian.architecture.kira.manager.alarm.AlarmHelper" autowire="byName">
+		<property name="eventDispatcher" ref="asyncDispatcher" />
+	</bean>
+	
+	<bean id="alarmCenter"
+		class="com.yihaodian.architecture.kira.manager.alarm.AlarmCenter" init-method="init" destroy-method="destroy" autowire="byName">
+	</bean>				
+	
+	<bean id="jobTimeoutTrackerEventHandler"
+		class="com.yihaodian.architecture.kira.manager.event.jobtimeouttracker.JobTimeoutTrackerEventHandler" init-method="init" destroy-method="destroy" autowire="byName">
+		<property name="eventDispatcher" ref="asyncDispatcher" />
+	</bean>
+	
+	<bean id="clusterInternalService"
+		class="com.yihaodian.architecture.kira.manager.core.server.impl.ClusterInternalService" autowire="byName">
+	</bean>	
+	
+	<bean id="kiraClientRegisterDataMessageHandler"
+		class="com.yihaodian.architecture.kira.manager.jms.impl.KiraClientRegisterDataMessageHandler" autowire="byName">
+	</bean>	
+	
+	<bean id="jobItemStatusReportMessageHandler"
+		class="com.yihaodian.architecture.kira.manager.jms.impl.JobItemStatusReportMessageHandler" autowire="byName">
+	</bean>
+	
+	<bean id="kiraManagerBootstrap" class="com.yihaodian.architecture.kira.manager.util.KiraManagerBootstrap" init-method="init" destroy-method="destroy" autowire="byName">
+	</bean>
+
+	<bean id="baseActor" class="com.yihaodian.architecture.kira.manager.akka.BaseActor" autowire="byName"></bean>
+</beans>

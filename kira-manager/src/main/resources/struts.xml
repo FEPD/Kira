@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<struts>
+	<include file="struts/struts-base.xml" />
+	<include file="struts/struts-login.xml" />
+	<include file="struts/struts-user.xml" />
+	<include file="struts/struts-triggerMetadata.xml" />
+	<include file="struts/struts-jobStatus.xml" />
+	<include file="struts/struts-job.xml" />
+	<include file="struts/struts-jobHistory.xml" />
+	<include file="struts/struts-jobItem.xml" />
+	<include file="struts/struts-jobItemHistory.xml" />
+	<include file="struts/struts-appCenter.xml" />
+	<include file="struts/struts-kiraServer.xml" />
+	<include file="struts/struts-menu.xml" />
+	<include file="struts/struts-operation.xml" />
+	<include file="struts/struts-operationLog.xml" />
+	<include file="struts/struts-other.xml" />
+	<include file="struts/struts-kiraClient.xml" />
+	<include file="struts/struts-kiraClientMetadata.xml" />
+	<include file="struts/struts-jobTimeoutTracker.xml" />
+	<include file="struts/struts-timerTriggerSchedule.xml" />
+	<include file="struts/struts-qrtzFiredTriggers.xml" />
+	<include file="struts/struts-qrtzSimpleTriggers.xml" />
+	<include file="struts/struts-qrtzTriggers.xml" />
+</struts>

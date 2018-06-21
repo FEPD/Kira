@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+	<bean id="yhdScheduler"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDSchedulerFactoryBean" lazy-init="false"  autowire="no" depends-on="kiraClientConfig">
+		<property name="triggers">
+			<list>
+					<ref local="testSucess-Trigger" />
+					<ref local="testFailed-Trigger" />
+					<ref local="doLeaderRoutineWork-Trigger" />
+					<ref local="handleJobRuntimeData-Trigger" />
+					<ref local="getTriggersWhichWillBeTriggeredInScope-Trigger" />
+					<ref local="getTriggerTriggeredTimeListMapInScope-Trigger" />
+					<ref local="doJobRunStatistics-Trigger" />
+					<ref local="doTriggersPredictReport-Trigger" />
+					<ref local="scanJobTimeoutTrackerData-Trigger" />
+					<ref local="setPrivateEmails-Trigger" />
+					<ref local="setPrivatePhoneNumbers-Trigger" />
+					<ref local="setAdminEmails-Trigger" />
+					<ref local="setAdminPhoneNumbers-Trigger" />
+					<ref local="setHealthEventReceiverEmails-Trigger" />
+					<ref local="setHealthEventReceiverPhoneNumbers-Trigger" />
+					<ref local="setAssignedServerIdBlackList-Trigger" />
+					<ref local="clearAssignedServerIdBlackList-Trigger" />
+					<ref local="loadBalanceForKiraTimerTriggerSchedule-Trigger" />
+					<ref local="kiraManagerClusterTimerTriggerScheduleHealthCheck-Trigger" />
+					<ref local="cleanInValidEnvironmentsForTimerTrigger-Trigger" />
+					<ref local="setKiraMasterZone-Trigger" />
+					<ref local="setAdminUserNames-Trigger" />
+					<ref local="getPoolIdsWhichHaveNoRunningEnvironments-Trigger" />
+					<ref local="getTriggersWhosePoolIdOrTriggerIdStartWithBlankOrEndWithBlank-Trigger" />
+					<ref local="getTriggersWhoseVersionAreNotValid-Trigger" />
+					<ref local="getTriggersWhichCanBeScheduledWhenInOldNoZoneSystem-Trigger" />
+					<ref local="migrateTheTriggersWhenUpgradeFromNoZoneSystemToZoneSystem-Trigger" />
+					<ref local="testSendEmail-Trigger" />
+					<ref local="testSendSMS-Trigger" />
+				<!--	<ref local="testRunShell-Trigger" />
+					<ref local="testCronRunShell-Trigger" />-->
+				<ref local="testFailed-Trigger" />
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.threadPool.threadCount">1</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="testSucess-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="testSucess-JobDetail" />
+		<property name="repeatInterval" value="30000" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于测试运行成功的定时任务." />
+		<property name="disabled" value="true" />
+	</bean>		
+	
+	<bean id="testFailed-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="testFailed-JobDetail" />
+		<property name="repeatInterval" value="60000" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于测试运行失败的定时任务." />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="doLeaderRoutineWork-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="doLeaderRoutineWork-JobDetail" />
+		<property name="cronExpression" value="0 0 0/1 ? * *" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="每小时让Leader服务器执行例行工作一次,以应对各种异常情况下注册失败等问题。" />
+		<property name="misfireInstruction" value="2" />
+		<property name="onlyScheduledInMasterZone" value="false" />
+	</bean>	
+	
+	<bean id="handleJobRuntimeData-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="handleJobRuntimeData-JobDetail" />
+		<property name="cronExpression" value="0 15 12 ? * *" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="每天中午12点15分处理下定时任务运行数据，数据清理由于delete性能问题已经移交DBA用分区表方式进行定期清理，暂时关闭这个定时任务。" />
+		<property name="misfireInstruction" value="2" />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="getTriggersWhichWillBeTriggeredInScope-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="getTriggersWhichWillBeTriggeredInScope-JobDetail" />
+		<property name="cronExpression" value="0 15 12 ? * *" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="获取一定时间范围内将要被触发执行的定时任务列表。" />
+		<property name="misfireInstruction" value="2" />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="getTriggerTriggeredTimeListMapInScope-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="getTriggerTriggeredTimeListMapInScope-JobDetail" />
+		<property name="cronExpression" value="0 15 12 ? * *" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="获取一定时间范围内将要被触发执行的定时任务及其触发时间列表。" />
+		<property name="misfireInstruction" value="2" />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="doJobRunStatistics-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="doJobRunStatistics-JobDetail" />
+		<property name="cronExpression" value="0 0 1 * * ?" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="进行Job执行统计。（默认实现为：每天1点对所有可用的定时任务在过去32天内的Job执行数据做统计。）" />
+		<property name="onlyScheduledInMasterZone" value="false" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="doTriggersPredictReport-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="doTriggersPredictReport-JobDetail" />
+		<property name="cronExpression" value="0 15 12 ? * *" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="执行定时任务在未来某个时间区间内被触发执行的预测报告。" />
+		<property name="misfireInstruction" value="2" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="scanJobTimeoutTrackerData-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="scanJobTimeoutTrackerData-JobDetail" />
+		<property name="cronExpression" value="0 0/1 * ? * *" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="每分钟扫描一次超时Job信息。" />
+		<property name="misfireInstruction" value="2" />
+		<property name="onlyScheduledInMasterZone" value="false" />
+	</bean>
+	
+	<bean id="setPrivateEmails-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setPrivateEmails-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于设置私人邮件地址列表，需要携带一个字符串参数，格式为:以逗号分隔的邮件地址列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>
+	
+	<bean id="setPrivatePhoneNumbers-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setPrivatePhoneNumbers-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于设置私人手机号码列表，需要携带一个字符串参数，格式为:以逗号分隔的手机号码列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>
+	
+	<bean id="setAdminEmails-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setAdminEmails-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于设置管理员的邮件地址列表，需要携带一个字符串参数，格式为:以逗号分隔的邮件地址列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>	
+	
+	<bean id="setAdminPhoneNumbers-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setAdminPhoneNumbers-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于设置管理员的手机号码列表，需要携带一个字符串参数，格式为:以逗号分隔的手机号码列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>	
+
+	<bean id="setHealthEventReceiverEmails-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setHealthEventReceiverEmails-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.4" />
+		<property name="description" value="用于设置健康监控事件接收人员的邮件地址列表，需要携带一个字符串参数，格式为:以逗号分隔的邮件地址列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>
+	
+	<bean id="setHealthEventReceiverPhoneNumbers-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setHealthEventReceiverPhoneNumbers-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于设置健康监控事件接收人员的手机号码列表，需要携带一个字符串参数，格式为:以逗号分隔的手机号码列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>			
+	
+	<bean id="setAssignedServerIdBlackList-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setAssignedServerIdBlackList-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于设置可以进行定时任务调度的服务器黑名单列表，需要携带一个字符串参数，格式为:以逗号分隔的serverId列表。" />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="clearAssignedServerIdBlackList-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="clearAssignedServerIdBlackList-JobDetail" />
+		<property name="repeatInterval" value="20100421" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于清空可以进行定时任务调度的服务器黑名单列表。" />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="loadBalanceForKiraTimerTriggerSchedule-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="loadBalanceForKiraTimerTriggerSchedule-JobDetail" />
+		<property name="startDelay" value="120000" />
+		<property name="repeatInterval" value="180000" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于定期对定时任务的调度进行负载均衡。" />
+		<property name="onlyScheduledInMasterZone" value="false" />
+	</bean>
+	
+	<bean id="kiraManagerClusterTimerTriggerScheduleHealthCheck-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="kiraManagerClusterTimerTriggerScheduleHealthCheck-JobDetail" />
+		<property name="startDelay" value="60000" />
+		<property name="repeatInterval" value="60000" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="priority" value="9999" />
+		<property name="requestsRecovery" value="true" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于对KiraManager集群的定时任务调度情况在外部进行健康检查。" />
+		<property name="onlyScheduledInMasterZone" value="false" />
+	</bean>
+	
+	<bean id="cleanInValidEnvironmentsForTimerTrigger-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="cleanInValidEnvironmentsForTimerTrigger-JobDetail" />
+		<property name="repeatInterval" value="20100421" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于清空非法的定时任务执行环境。" />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="setKiraMasterZone-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setKiraMasterZone-JobDetail" />
+		<property name="repeatInterval" value="20100421" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于设置Kira的MasterZone,这个值将被设置到所有Zone中。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>
+	
+	<bean id="setAdminUserNames-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="setAdminUserNames-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="onlyRunOnSingleProcess" value="false" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="用于设置管理员的用户名列表，需要携带一个字符串参数，格式为:以逗号分隔的用户名列表。" />
+		<property name="disabled" value="true" />
+		<property name="copyFromMasterToSlaveZone" value="true" />
+	</bean>
+	
+	<bean id="getPoolIdsWhichHaveNoRunningEnvironments-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="getPoolIdsWhichHaveNoRunningEnvironments-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于获取没有可以用于执行定时任务所需执行环境对应的poolId列表。" />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="getTriggersWhosePoolIdOrTriggerIdStartWithBlankOrEndWithBlank-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="getTriggersWhosePoolIdOrTriggerIdStartWithBlankOrEndWithBlank-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于获取PoolId或者TriggerId以空格开始或者以空格结尾的定时任务列表。" />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="getTriggersWhoseVersionAreNotValid-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="getTriggersWhoseVersionAreNotValid-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于获取当前版本号不合法的定时任务列表。" />
+		<property name="disabled" value="true" />
+	</bean>
+	
+	<bean id="getTriggersWhichCanBeScheduledWhenInOldNoZoneSystem-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="getTriggersWhichCanBeScheduledWhenInOldNoZoneSystem-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于获取在旧的没有Zone概念的Kira老系统中可以被调度的定时任务列表。" />
+		<property name="disabled" value="true" />
+	</bean>
+										
+	<bean id="migrateTheTriggersWhenUpgradeFromNoZoneSystemToZoneSystem-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="migrateTheTriggersWhenUpgradeFromNoZoneSystemToZoneSystem-JobDetail" />
+		<property name="repeatInterval" value="19810815" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="在从没有Zone概念的老系统升级到有Zone概念的新系统时需要对对已有的定时任务进行迁移操作，以便保持原有调度状态。" />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="testSendEmail-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="testSendEmail-JobDetail" />
+		<property name="repeatInterval" value="30000" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于测试运行邮件的定时任务." />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="testSendSMS-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="testSendSMS-JobDetail" />
+		<property name="repeatInterval" value="30000" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于测试运行邮件和短信的定时任务." />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="testRunShell-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean">
+		<property name="jobDetail" ref="testRunShell-JobDetail" />
+		<property name="repeatInterval" value="30000" />
+		<property name="version" value="0.0.1" />
+		<property name="description" value="用于测试Shell Job运行成功的定时任务." />
+		<property name="disabled" value="true" />
+	</bean>
+
+	<bean id="testCronRunShell-Trigger" class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean">
+		<property name="jobDetail" ref="testCronRunShell-JobDetail" />
+		<property name="cronExpression" value="0 0/1 * ? * *" />
+		<property name="version" value="0.0.2" />
+		<property name="description" value="每分钟执行一次Shell Job" />
+		<property name="misfireInstruction" value="2" />
+		<property name="onlyScheduledInMasterZone" value="false" />
+	</bean>
+
+	<bean id="testSucess-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="testSucess"/>
+		<property name="concurrent" value="false"/>
+	</bean>
+	
+	<bean id="testFailed-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="testFailed"/>
+		<property name="concurrent" value="false"/>
+	</bean>	
+	
+	<bean id="doLeaderRoutineWork-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="doLeaderRoutineWork"/>
+		<property name="concurrent" value="false"/>
+	</bean>		
+	
+	<bean id="handleJobRuntimeData-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="handleJobRuntimeData"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+		    <list>
+		       <map><!-- Please use java.util.LinkedHashMap as method param -->
+		       </map>
+		     </list>
+		</property> 		
+	</bean>
+
+	<bean id="getTriggersWhichWillBeTriggeredInScope-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="getTriggersWhichWillBeTriggeredInScope"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+			<list>
+				<map><!-- Please use java.util.LinkedHashMap as method param -->
+					<entry key="startTime" value="2016-07-27 00:00:00"/>
+					<entry key="endTime" value="2016-07-27 01:00:00"/>
+					<entry key="poolIdList" value="kira,detector"/>
+					<entry key="triggerIdList" value=","/>
+				</map>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="getTriggerTriggeredTimeListMapInScope-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="getTriggerTriggeredTimeListMapInScope"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+			<list>
+				<map><!-- Please use java.util.LinkedHashMap as method param -->
+					<entry key="startTime" value="2016-07-27 00:00:00"/>
+					<entry key="endTime" value="2016-07-27 01:00:00"/>
+					<entry key="poolIdList" value="kira"/>
+					<entry key="triggerIdList" value=","/>
+					<entry key="maxCountPerTrigger" value="10"/>
+				</map>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="doJobRunStatistics-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="doJobRunStatistics"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+			<list>
+				<map><!-- Please use java.util.LinkedHashMap as method param -->
+					<entry key="beginTime" value=""/>
+					<entry key="endTime" value=""/>
+					<entry key="daysInterval" value="32"/>
+					<entry key="maxSampleCount" value="10"/>
+				</map>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="doTriggersPredictReport-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="doTriggersPredictReport"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+			<list>
+				<map><!-- Please use java.util.LinkedHashMap as method param -->
+					<entry key="startTime" value="2017-08-14 22:30:00"/>
+					<entry key="endTime" value="2017-08-16 00:00:00"/>
+					<entry key="poolIdList" value=","/>
+					<entry key="triggerIdList" value=","/>
+				</map>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="scanJobTimeoutTrackerData-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="scanJobTimeoutTrackerData"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	       <map><!-- Please use java.util.LinkedHashMap as method param -->
+	        <entry key="jobTimeoutTrackerHandleMaxCountPerTime">
+	         <value>100</value>
+	        </entry>
+	       </map>
+	     </list>
+		</property> 		
+	</bean>
+	
+	<bean id="setPrivateEmails-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setPrivateEmails"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>
+	
+	<bean id="setPrivatePhoneNumbers-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setPrivatePhoneNumbers"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>		
+	
+	<bean id="setAdminEmails-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setAdminEmails"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>
+	
+	<bean id="setAdminPhoneNumbers-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setAdminPhoneNumbers"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>
+			
+	<bean id="setHealthEventReceiverEmails-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setHealthEventReceiverEmails"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>	
+	
+	<bean id="setHealthEventReceiverPhoneNumbers-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setHealthEventReceiverPhoneNumbers"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>				
+	
+	<bean id="setAssignedServerIdBlackList-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="kiraServerService" />
+		</property>
+		<property name="targetMethod" value="setAssignedServerIdBlackList"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>
+	
+	<bean id="clearAssignedServerIdBlackList-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="kiraServerService" />
+		</property>
+		<property name="targetMethod" value="clearAssignedServerIdBlackList"/>
+		<property name="concurrent" value="false"/> 		
+	</bean>
+	
+	<bean id="loadBalanceForKiraTimerTriggerSchedule-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="kiraServerService" />
+		</property>
+		<property name="targetMethod" value="loadBalanceForKiraTimerTriggerSchedule"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value>100</value>
+	     </list>
+		</property> 		
+	</bean>	
+	
+	<bean id="kiraManagerClusterTimerTriggerScheduleHealthCheck-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="healthCheckForTimerTriggerScheduleForKiraManagerCluster"/>
+		<property name="concurrent" value="false"/>	
+	</bean>
+	
+	<bean id="cleanInValidEnvironmentsForTimerTrigger-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="cleanInValidEnvironmentsForTimerTrigger"/>
+		<property name="concurrent" value="false"/>	
+	</bean>
+	
+	<bean id="setKiraMasterZone-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setKiraMasterZone"/>
+		<property name="concurrent" value="false"/>	
+		<property name="arguments">
+	    	<list>
+	    		<value></value>
+	     	</list>
+		</property>		
+	</bean>
+	
+	<bean id="setAdminUserNames-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="setAdminUserNames"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+	    <list>
+	    	<value></value>
+	     </list>
+		</property> 		
+	</bean>
+	
+	<bean id="getPoolIdsWhichHaveNoRunningEnvironments-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="getPoolIdsWhichHaveNoRunningEnvironments"/>
+		<property name="concurrent" value="false"/> 		
+	</bean>	
+	
+	<bean id="getTriggersWhosePoolIdOrTriggerIdStartWithBlankOrEndWithBlank-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="getTriggersWhosePoolIdOrTriggerIdStartWithBlankOrEndWithBlank"/>
+		<property name="concurrent" value="false"/> 		
+	</bean>
+
+	<bean id="getTriggersWhoseVersionAreNotValid-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="getTriggersWhoseVersionAreNotValid"/>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="getTriggersWhichCanBeScheduledWhenInOldNoZoneSystem-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="getTriggersWhichCanBeScheduledWhenInOldNoZoneSystem"/>
+		<property name="concurrent" value="false"/> 		
+	</bean>
+	
+	<bean id="migrateTheTriggersWhenUpgradeFromNoZoneSystemToZoneSystem-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="migrateTheTriggersWhenUpgradeFromNoZoneSystemToZoneSystem"/>
+		<property name="concurrent" value="false"/> 		
+	</bean>
+
+	<bean id="testSendEmail-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="testSendEmail"/>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+
+	<bean id="testSendSMS-JobDetail"
+		class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="otherService" />
+		</property>
+		<property name="targetMethod" value="testSendSMS"/>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="testRunShell-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="clientService" />
+		</property>
+		<property name="targetMethod" value="runShellMethod"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+			<list>
+				<map>
+					<entry key="jobType" value="ShellJob" />
+					<entry key="runShellPath" value="/export/App/test.sh" />
+				</map>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="testCronRunShell-JobDetail"
+		  class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="clientService" />
+		</property>
+		<property name="targetMethod" value="runShellMethod"/>
+		<property name="concurrent" value="false"/>
+		<property name="arguments">
+			<list>
+				<map>
+					<entry key="jobType" value="ShellJob" />
+					<entry key="shellName" value="script/test.sh" />
+				</map>
+			</list>
+		</property>
+	</bean>
+</beans>

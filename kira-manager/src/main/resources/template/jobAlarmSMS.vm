@@ -1,0 +1,1 @@
+[Kira]-[$!{env}环境] 定时任务执行报警: jobId=$!{jobAlarmMessage.jobId} , AppId=$!{jobAlarmMessage.appId} , 定时任务Id=$!{jobAlarmMessage.triggerId} , 定时任务版本=$!{jobAlarmMessage.triggerVersion} , 定时任务执行开始时间=$!{jobAlarmMessage.jobCreateTimeAsString} , 定时任务执行当前状态=$!{jobAlarmMessage.jobStatusName}。 <a href="$!{kiraManagerUrlPath}">Kira平台($!{env}环境)入口</a>

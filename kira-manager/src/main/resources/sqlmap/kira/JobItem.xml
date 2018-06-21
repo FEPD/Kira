@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobItem">
+
+	<resultMap id="jobItemResult" type="JobItem">
+		<result column="id" property="id" />
+		<result column="job_id" property="jobId" />
+		<result column="service_url" property="serviceUrl" />
+		<result column="arguments_as_json_array_string" property="argumentsAsJsonArrayString" />
+		<result column="job_status_id" property="jobStatusId" />
+		<result column="create_time" property="createTime" />
+		<result column="last_update_time" property="lastUpdateTime" />
+		<result column="result_data" property="resultData" />
+		<result column="data_version" property="dataVersion" />
+	</resultMap>
+	
+	<resultMap id="jobItemDetailDataResult" type="JobItemDetailData">
+		<result column="id" property="id" />
+		<result column="job_id" property="jobId" />
+		<result column="service_url" property="serviceUrl" />
+		<result column="arguments_as_json_array_string" property="argumentsAsJsonArrayString" />
+		<result column="create_time" property="createTime" />
+		<result column="last_update_time" property="lastUpdateTime" />
+		<result column="result_data" property="resultData" />
+		
+		<result column="trigger_metadata_id" property="triggerMetadataId" />
+		
+		<result column="job_status_id" property="jobStatusId" />
+		<result column="job_status_name" property="jobStatusName" />
+		
+		<result column="app_id" property="appId" />
+		<result column="trigger_id" property="triggerId" />
+		<result column="version" property="version" />
+	</resultMap>	
+
+	<insert id="insert" parameterType="JobItem">
+		INSERT INTO job_item
+		(id, job_id, service_url, arguments_as_json_array_string, job_status_id, create_time, last_update_time,
+		result_data)
+		VALUES
+		(#{id}, #{jobId}, #{serviceUrl}, #{argumentsAsJsonArrayString}, #{jobStatusId}, #{createTime}, #{lastUpdateTime},
+		#{resultData})
+	</insert>
+
+	<update id="update" parameterType="JobItem">
+		UPDATE
+		job_item
+		SET
+		job_id = #{jobId},
+		service_url = #{serviceUrl},
+		arguments_as_json_array_string = #{argumentsAsJsonArrayString},
+		job_status_id = #{jobStatusId},
+		create_time = #{createTime},
+		last_update_time = #{lastUpdateTime},
+		result_data = #{resultData},
+		data_version = data_version+1
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM
+		job_item
+		WHERE
+		id = #{id}
+	</delete>
+
+	<select id="select" parameterType="string" resultMap="jobItemResult">
+		SELECT
+		id,
+		job_id,
+		service_url,
+		arguments_as_json_array_string,
+		job_status_id,
+		create_time,
+		last_update_time,
+		result_data,
+		data_version
+		FROM
+		job_item
+		WHERE
+		id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="id != null and id != ''" >
+		 id = #{id}
+		</if>
+		<if test="jobId != null and jobId != ''" >
+			AND job_id = #{jobId}
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		ORDER  BY
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+		<if test="orderByClause == null">
+			create_time ASC
+		</if>
+	</sql>
+
+
+	<select id="list" parameterType="JobItemCriteria" resultMap="jobItemResult">
+		SELECT
+		id,
+		job_id,
+		service_url,
+		arguments_as_json_array_string,
+		job_status_id,
+		create_time,
+		last_update_time,
+		result_data,
+		data_version
+		FROM
+		job_item
+		<include refid="criteriaWhereClause" />
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="JobItemCriteria" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		job_item
+		<include refid="criteriaWhereClause" />
+	</select>
+	
+	<sql id="listConditionalSql">
+		SELECT
+		job_item.id,
+		job_item.job_id,
+		job_item.service_url,
+		job_item.arguments_as_json_array_string,
+		job_item.job_status_id,
+		job_item.create_time,
+		job_item.last_update_time,
+		job_item.result_data,
+		job.trigger_metadata_id,
+		job_status.name as job_status_name,
+		trigger_metadata.app_id,
+		trigger_metadata.trigger_id,
+		trigger_metadata.version
+		FROM
+		job_item , job , job_status , trigger_metadata
+		WHERE job_item.job_id = job.id and job.trigger_metadata_id = trigger_metadata.id and job_item.job_status_id = job_status.id
+
+		<if test="id != null and id != ''" >
+			AND job_item.id = #{id}
+		</if>
+		<if test="jobId != null and jobId != ''" >
+			AND job_item.job_id = #{jobId}
+		</if>
+		<if test="appId != null and appId != ''">
+			AND trigger_metadata.app_id = #{appId}
+		</if>
+		<if test="triggerId != null and triggerId != ''">
+			AND trigger_metadata.trigger_id = #{triggerId}
+		</if>
+		<if test="version != null and version != ''">
+			AND trigger_metadata.version = #{version}
+		</if>
+		<include refid="orderByClause" />
+	</sql>	
+	
+	<select id="getJobItemDetailDataList" parameterType="JobItemCriteria" resultMap="jobItemDetailDataResult">
+		<include refid="listConditionalSql" />
+	</select>
+	
+	<select id="countJobItemDetailDataList" parameterType="JobItemCriteria" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			<include refid="listConditionalSql" />
+		) as t
+	</select>	
+	
+	<update id="updateJobItemStatus" parameterType="map">
+		  update job_item set job_status_id=#{jobStatusId},last_update_time=#{updateTime},
+		result_data=#{resultData},data_version=data_version+1 where id=#{id}
+		<if test="jobStatusIdList != null and jobStatusIdList.size > 0 " >
+			AND job_status_id in
+			<foreach collection ="jobStatusIdList" index = "index" item = "jobStatusIdList" open = "(" close = ")" separator = ",">
+				#{jobStatusIdList}
+			</foreach>
+		</if>
+		<if test="dataVersion != null and dataVersion != ''">
+			AND data_version = #{dataVersion}
+		</if>
+	</update>
+
+	<sql id="createTimeRangeWhereClause">
+		<where>
+		<if test="startTime != null" >
+			 <![CDATA[
+					create_time >= #{startTime}
+				]]>
+		</if>
+		<if test="endTime != null">
+			AND <![CDATA[
+					create_time < #{endTime}
+				]]>
+		</if>
+		</where>
+	</sql>
+
+	<select id="createArchiveTableAndDataForJobItemTable" parameterType="map">
+			CREATE TABLE IF NOT EXISTS archive_job_item_${newTableNameSuffix} ENGINE=archive DEFAULT CHARSET=utf8 AS SELECT * from job_item
+				<include refid="createTimeRangeWhereClause" />
+	</select>
+	
+	<select id="createArchiveTableForJobItemTableIfNeeded" parameterType="map">
+			CREATE TABLE IF NOT EXISTS backup_job_item_${newTableNameSuffix} like job_item
+	</select>
+	
+	<insert id="insertDataToJobItemArchiveTable" parameterType="map">
+		INSERT IGNORE INTO backup_job_item_${newTableNameSuffix} select * from job_item
+		<include refid="createTimeRangeWhereClause" />
+	</insert>		
+	
+	<delete id="deleteJobItemData" parameterType="map">
+		DELETE FROM
+		job_item
+			<include refid="createTimeRangeWhereClause" />
+	</delete>		
+	
+	<select id="getDateOfOldestJobItem" resultType="java.util.Date">
+	    SELECT create_time FROM job_item order by create_time limit 1
+	</select>			
+
+</mapper>

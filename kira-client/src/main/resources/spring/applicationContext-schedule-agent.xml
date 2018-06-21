@@ -1,0 +1,93 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+>
+
+  <!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+  <bean autowire="no"
+    class="com.yihaodian.architecture.kira.client.quartz.YHDSchedulerFactoryBean" depends-on="kiraClientConfig"
+    id="yhdScheduler" lazy-init="false">
+    <property name="triggers">
+      <list>
+        <ref local="agent-testSucessShell-Trigger"/>
+        <ref local="agent-testCronRunShell-Trigger"/>
+      </list>
+    </property>
+    <property name="quartzProperties">
+      <props>
+        <prop key="org.quartz.threadPool.threadCount">1</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean class="com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean"
+    id="agent-testSucessShell-Trigger">
+    <property name="jobDetail" ref="testSucess-JobDetail"/>
+    <property name="repeatInterval" value="30000"/>
+    <property name="version" value="0.0.1"/>
+    <property name="description" value="用于测试运行成功的定时任务."/>
+    <property name="disabled" value="true"/>
+  </bean>
+
+
+  <bean class="com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean"
+    id="agent-testCronRunShell-Trigger">
+    <property name="jobDetail" ref="testCronRunShell-JobDetail"/>
+    <property name="cronExpression" value="0 0/1 * ? * *"/>
+    <property name="version" value="0.0.2"/>
+    <property name="description" value="每分钟执行一次Shell Job"/>
+    <property name="misfireInstruction" value="2"/>
+    <property name="onlyScheduledInMasterZone" value="false"/>
+  </bean>
+
+
+  <bean class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean"
+    id="testSucess-JobDetail">
+    <property name="targetObject">
+      <ref bean="clientService"/>
+    </property>
+    <property name="targetMethod" value="runShellMethod"/>
+    <property name="concurrent" value="false"/>
+    <property name="arguments">
+      <list>
+        <map>
+          <entry key="jobType" value="ShellJob"/>
+          <entry key="runShellPath"
+            value="/export/App/kira-client-2.1.5.1-agent/shell/test-agent-simple.sh"/>
+        </map>
+      </list>
+    </property>
+  </bean>
+
+  <bean class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean"
+    id="testCronRunShell-JobDetail">
+    <property name="targetObject">
+      <ref bean="clientService"/>
+    </property>
+    <property name="targetMethod" value="runShellMethod"/>
+    <property name="concurrent" value="false"/>
+    <property name="arguments">
+      <list>
+        <map>
+          <entry key="jobType" value="ShellJob"/>
+          <entry key="shellName" value="shell/test-agent-cron.sh"/>
+        </map>
+      </list>
+    </property>
+  </bean>
+
+</beans>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="kiraServer" namespace="/kiraServer" extends="kira-base">
+		<action name="getKiraServerDetailDataList"
+			class="com.yihaodian.architecture.kira.manager.action.KiraServerAction"
+			method="getKiraServerDetailDataList">
+		</action>
+		
+		<!-- start admin usage -->			
+		<!--<action name="startServer"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.KiraServerAction"-->
+			<!--method="startServer">-->
+		<!--</action>-->
+		<!--<action name="stopServer"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.KiraServerAction"-->
+			<!--method="stopServer">-->
+		<!--</action>-->
+		<!--<action name="restartServer"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.KiraServerAction"-->
+			<!--method="restartServer">-->
+		<!--</action>-->
+		<!--<action name="destroyServer"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.KiraServerAction"-->
+			<!--method="destroyServer">-->
+		<!--</action>		-->
+		<!--<action name="recoverServer"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.KiraServerAction"-->
+			<!--method="recoverServer">-->
+		<!--</action>	-->
+<!-- 		<action name="addServerIdToAssignedServerIdBlackList" -->
+<!-- 			class="com.yihaodian.architecture.kira.manager.action.KiraServerAction" -->
+<!-- 			method="addServerIdToAssignedServerIdBlackList"> -->
+<!-- 		</action> -->
+<!-- 		<action name="removeServerIdFromAssignedServerIdBlackList" -->
+<!-- 			class="com.yihaodian.architecture.kira.manager.action.KiraServerAction" -->
+<!-- 			method="removeServerIdFromAssignedServerIdBlackList"> -->
+<!-- 		</action>	 -->
+<!-- 		<action name="setAssignedServerIdBlackList" -->
+<!-- 			class="com.yihaodian.architecture.kira.manager.action.KiraServerAction" -->
+<!-- 			method="setAssignedServerIdBlackList"> -->
+<!-- 		</action> -->
+<!-- 		<action name="clearAssignedServerIdBlackList" -->
+<!-- 			class="com.yihaodian.architecture.kira.manager.action.KiraServerAction" -->
+<!-- 			method="clearAssignedServerIdBlackList"> -->
+<!-- 		</action>																																	 -->
+		<!-- end admin usage -->		
+	</package>
+</struts>

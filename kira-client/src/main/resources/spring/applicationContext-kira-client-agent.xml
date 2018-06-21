@@ -1,0 +1,37 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+>
+
+  <!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+  <bean class="com.yihaodian.architecture.kira.client.util.KiraClientConfig" id="kiraClientConfig">
+    <property name="appCenter" value="false"/>
+    <property name="waitForResourceTimeoutMillisecond" value="120000"/>
+    <property name="autoDeleteTriggersOnZK" value="true"/>
+    <!-- 		<property name="locationsToRunJobForAllTriggers" value="xxx:8080" /> -->
+
+    <property name="visibilityLimited" value="false"/>
+    <property name="visibleForUsers" value="xxx"/>
+    <property name="sendAlarmEmail" value="true"/>
+    <property name="emailsToReceiveAlarm" value="xxx"/>
+    <property name="sendAlarmSMS" value="true"/>
+    <property name="phoneNumbersToReceiveAlarmSMS" value=""/>
+  </bean>
+
+  <import resource="applicationContext-schedule-agent.xml"/>
+
+</beans>

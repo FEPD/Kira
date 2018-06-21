@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobItemHistory">
+
+	<resultMap id="jobItemHistoryResult" type="JobItemHistory">
+		<result column="id" property="id" />
+		<result column="job_item_id" property="jobItemId" />
+		<result column="job_status_id" property="jobStatusId" />
+		<result column="result_data" property="resultData" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<resultMap id="jobItemHistoryDetailDataResult" type="JobItemHistoryDetailData">
+		<result column="id" property="id" />
+		<result column="job_item_id" property="jobItemId" />
+		<result column="job_status_id" property="jobStatusId" />
+		<result column="result_data" property="resultData" />
+		<result column="create_time" property="createTime" />
+		
+		<result column="job_status_name" property="jobStatusName" />
+	</resultMap>	
+
+	<insert id="insert" parameterType="JobItemHistory">
+		INSERT INTO job_item_history
+		(id, job_item_id, job_status_id, result_data, create_time)
+		VALUES
+		(#{id}, #{jobItemId}, #{jobStatusId}, #{resultData}, #{createTime})
+	</insert>
+
+	<update id="update" parameterType="JobItemHistory">
+		UPDATE
+		job_item_history
+		SET
+		job_item_id = #{jobItemId},
+		job_status_id = #{jobStatusId},
+		result_data = #{resultData},
+		create_time = #{createTime}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM
+		job_item_history
+		WHERE
+		id = #{id}
+	</delete>
+
+	<select id="select" parameterType="string" resultMap="jobItemHistoryResult">
+		SELECT
+		id,
+		job_item_id,
+		job_status_id,
+		result_data,
+		create_time
+		FROM
+		job_item_history
+		WHERE
+		id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<if test="id != null and id != ''">
+			WHERE id = #{id}
+		</if>
+	</sql>
+
+	<sql id="orderByClause">
+		ORDER  BY
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+		<if test="orderByClause == null">
+			job_status_id		ASC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="JobItemHistoryCriteria"
+		resultMap="jobItemHistoryResult">
+		SELECT
+		id,
+		job_item_id,
+		job_status_id,
+		result_data,
+		create_time
+		FROM
+		job_item_history
+		<include refid="criteriaWhereClause" />
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="JobItemHistoryCriteria"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		job_item_history
+		<include refid="criteriaWhereClause" />
+	</select>
+	
+	<sql id="listConditionalSql">
+		SELECT
+		job_item_history.id,
+		job_item_history.job_item_id,
+		job_item_history.job_status_id,
+		job_item_history.result_data,
+		job_item_history.create_time,
+		job_status.name as job_status_name
+		FROM
+		job_item_history, job_status
+		WHERE job_item_history.job_status_id = job_status.id
+		 <if test="id != null and id != ''">
+			AND job_item_history.id = #{id}
+		 </if>
+		<if test="jobItemId != null and jobItemId != ''">
+			AND job_item_history.job_item_id = #{jobItemId}
+		</if>
+		<include refid="orderByClause" />
+	</sql>	
+	
+	<select id="getJobItemHistoryDetailDataList" parameterType="JobItemHistoryCriteria" resultMap="jobItemHistoryDetailDataResult">
+		<include refid="listConditionalSql" />
+	</select>
+	
+	<select id="countJobItemHistoryDetailDataList" parameterType="JobItemHistoryCriteria" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			<include refid="listConditionalSql" />
+		) as t
+	</select>
+
+	<sql id="createTimeRangeWhereClause">
+		<where>
+		<if test="startTime != null" >
+			 <![CDATA[
+					create_time >= #{startTime}
+				]]>
+		</if>
+		<if test="endTime != null">
+			AND <![CDATA[
+					create_time < #{endTime}
+				]]>
+		</if>
+		</where>
+	</sql>
+
+	<select id="createArchiveTableAndDataForJobItemHistoryTable" parameterType="map">
+			CREATE TABLE IF NOT EXISTS archive_job_item_history_${newTableNameSuffix} ENGINE=archive DEFAULT CHARSET=utf8 AS SELECT * from job_item_history
+				<include refid="createTimeRangeWhereClause" />
+	</select>
+	
+	<select id="createArchiveTableForJobItemHistoryTableIfNeeded" parameterType="map">
+			CREATE TABLE IF NOT EXISTS backup_job_item_history_${newTableNameSuffix} like job_item_history
+	</select>
+	
+	<insert id="insertDataToJobItemHistoryArchiveTable" parameterType="map">
+		INSERT IGNORE INTO backup_job_item_history_${newTableNameSuffix} select * from job_item_history
+		<include refid="createTimeRangeWhereClause" />
+	</insert>		
+	
+	<delete id="deleteJobItemHistoryData" parameterType="map">
+		DELETE FROM
+		job_item_history
+			<include refid="createTimeRangeWhereClause" />
+	</delete>	
+
+	<select id="getDateOfOldestJobItemHistory" resultType="java.util.Date">
+	    SELECT create_time FROM job_item_history order by create_time limit 1
+	</select>
+		
+</mapper>

@@ -1,0 +1,219 @@
+
+.icon-nav {
+	background-image: url(../images/nav.png) !important;
+}
+
+.icon-tree {
+	background-image: url(../images/tree.png) !important;
+}
+
+.icon-activity {
+	background-image: url(../images/activity.png) !important;
+}
+
+.icon-hr {
+	background-image: url(../images/hr.png) !important;
+}
+
+.icon-system {
+	background-image: url(../images/system.png) !important;
+}
+
+.icon-user {
+	background-image: url(../images/man.gif) !important;
+}
+.icon-file {
+	background-image: url(../images/download-file.png) !important;
+}
+
+.icon-add {
+	background-image: url(../images/add.png) !important;
+}
+.icon-del {
+	background-image: url(../images/delete.png) !important;
+}
+
+.icon-add-p {
+	background-image: url(../images/add_p.png) !important;
+}
+.icon-del-p {
+	background-image: url(../images/delete_p.png) !important;
+}
+
+.icon-edit {
+	background-image: url(../images/edit.png) !important;
+}
+
+.icon-refresh {
+	background-image: url(../images/refresh.gif) !important;
+}
+
+.icon-grid-list {
+	background-image:url(../images/grid_list.png) !important;
+}
+
+.icon-search-form{
+	background-image: url(../images/search_form.png) !important;
+}
+.icon-form{
+	background-image: url(../images/form.png) !important;
+}
+.icon-search {
+	background-image: url(../images/search.png) !important;
+}
+.icon-save {
+	background-image: url(../images/save.png) !important;
+}
+.icon-reset{
+	background-image:url(../images/reset.png) !important;
+}
+.icon-chart {
+	background-image: url(../images/chart.gif) !important;
+}
+
+.icon-upload {
+	background-image: url(../images/adminFile/upload-file.png) !important;
+}
+
+.icon-unupload {
+	background-image: url(../images/del-file.png) !important;
+}
+
+.icon-download {
+	background-image: url(../images/download-file.png) !important;
+}
+
+.icon-word {
+	background-image: url(../images/word.png) !important;
+}
+
+.icon-pdf {
+	background-image: url(../images/pdf.png) !important;
+}
+
+.icon-excel {
+	background-image: url(../images/excel.png) !important;
+}
+.icon-info {
+	background-image: url(../images/info.gif) !important;
+}
+.icon-logout {
+	background-image: url(../images/logout.png) !important;
+}
+.icon-style {
+	background-image: url(../images/style.png) !important;
+}
+.icon-person-info {
+	background-image: url(../images/person_info.png) !important;
+}
+.icon-person-info-edit{
+	background-image: url(../images/person_info_edit.png) !important;
+}
+.icon-key-edit{
+	background-image: url(../images/key_edit.png) !important;
+}
+.icon-version{
+	background-image: url(../images/version.png) !important;
+}
+.icon-docs{
+	background-image: url(../images/docs.gif) !important;
+}
+.icon-help{
+	background-image: url(../images/help.png) !important;
+}
+.icon-layout{
+	background-image: url(../images/layout.png) !important;
+}
+.icon-grant{
+	background-image: url(../images/grant.png) !important;
+}
+
+.icon-collapse-all{
+	background-image: url(../images/collapse-all.gif) !important;
+}
+
+.icon-expand-all{
+	background-image: url(../images/expand-all.gif) !important;
+}
+
+.icon-load-r{
+	background-image: url(../images/load_r.png) !important;
+}
+
+.icon-yes{
+	background-image: url(../images/yes.png) !important;
+}
+
+.icon-no{
+	background-image: url(../images/no.png) !important;
+}
+
+.icon-ok{
+	background-image: url(../images/ok.png) !important;
+}
+
+.icon-cancel{
+	background-image: url(../images/cancel.png) !important;
+}
+.icon-tip{
+	background-image: url(../images/tip.png) !important;
+}
+
+.icon-logout{
+	background-image: url(../images/logout.png) !important;
+}
+.icon-sys-config{
+	background-image: url(../images/sys_config.png) !important;
+}
+.icon-status-away{
+	background-image: url(../images/status_away.png) !important;
+}
+.icon-status-busy{
+	background-image: url(../images/status_busy.png) !important;
+}
+.icon-status-offline{
+	background-image: url(../images/status_offline.png) !important;
+}
+.icon-status-online{
+	background-image: url(../images/status_online.png) !important;
+}
+.icon-user-info{
+	background-image: url(../images/user_info.png) !important;
+}
+.icon-email{
+	background-image: url(../images/email.png) !important;
+}
+.icon-email-list{
+	background-image: url(../images/email_list.png) !important;
+}
+.icon-im{
+	background-image: url(../images/im.png) !important;
+}
+.icon-note{
+	background-image: url(../images/note.png) !important;
+}
+.icon-link{
+	background-image: url(../images/link.png) !important;
+}
+.icon-notice{
+	background-image: url(../images/notice.png) !important;
+}
+.icon-news{
+	background-image: url(../images/news.png) !important;
+}
+.icon-user-set{
+	background-image: url(../images/user_set.png) !important;
+}
+.icon-accordion{
+	background-image: url(../images/accordion.gif) !important;
+}
+
+.icon-workflow{
+	background-image: url(../images/workflow.png) !important;
+}
+
+
+.x-message-box .icon-saving {
+    background:transparent url(../images/download.gif) no-repeat bottom left;
+    height:46px;
+}

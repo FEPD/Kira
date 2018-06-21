@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="triggerMetadata" namespace="/triggerMetadata" extends="kira-base">
+		<action name="listOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="listOnPage">
+		</action>		
+		<action name="listLatest"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="listLatest">
+		</action>
+		<action name="listLatestOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="listLatestOnPage">
+		</action>
+		<action name="getAllPoolIdTriggerIdsMap"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getAllPoolIdTriggerIdsMap">
+		</action>	
+		<action name="getPoolTriggerStatus"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getPoolTriggerStatus">
+		</action>	
+		<action name="getPoolTriggerStatusListOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getPoolTriggerStatusListOnPage">
+		</action>			
+		<action name="getTriggerEnvironmentDetailDataListOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getTriggerEnvironmentDetailDataListOnPage">
+		</action>
+		<action name="getAllPoolIdList"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getAllPoolIdList">
+		</action>	
+		<action name="getAllAvailablePoolIdList"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getAllAvailablePoolIdList">
+		</action>			
+		<action name="getAllTriggerIdList"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getAllTriggerIdList">
+		</action>	
+		<action name="getAllAvailableTriggerIdList"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getAllAvailableTriggerIdList">
+		</action>			
+		<action name="updateTriggersAsUnRegistered"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="updateTriggersAsUnRegistered">
+		</action>	
+		<action name="rescheduleJob"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="rescheduleJob">
+		</action>		
+		<action name="deleteTrigger"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="deleteTrigger">
+		</action>
+		<action name="getTriggerMetadataById"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getTriggerMetadataById">
+		</action>		
+		<action name="getTriggerTypeList"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getTriggerTypeList">
+		</action>
+		<action name="getMisfireInstructionList"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getMisfireInstructionList">
+		</action>				
+		<action name="updateTrigger"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="updateTrigger">
+		</action>	
+		<action name="deleteTriggerEnvironment"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="deleteTriggerEnvironment">
+		</action>						
+		<action name="manuallyRunJobByTriggerMetadata"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="manuallyRunJobByTriggerMetadata">
+		</action>	
+		<action name="createTrigger"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="createTrigger">
+		</action>
+		<action name="getLatestTriggerMetadatasWhichSetTriggerAsTargetOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getLatestTriggerMetadatasWhichSetTriggerAsTargetOnPage">
+		</action>	
+		<action name="getLatestTriggerMetadatasWhichSetTriggersOfPoolAsTargetOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getLatestTriggerMetadatasWhichSetTriggersOfPoolAsTargetOnPage">
+		</action>
+		<action name="getKiraTimerTriggerBusinessRunningInstanceListOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.TriggerMetadataAction"
+			method="getKiraTimerTriggerBusinessRunningInstanceListOnPage">
+		</action>																						
+	</package>
+</struts>

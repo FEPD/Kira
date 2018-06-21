@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>$!{emailSubject}</title>
+		<style type="text/css">
+			th {
+					width:20%;
+					background-color:#E5EEF8;
+					font-weight:bold;
+					text-align:left;
+				}
+		</style>     
+    </head>
+    <body>
+        <p>
+           <a href="$!{kiraManagerUrlPath}">Kira平台($!{env}环境)入口</a>
+        </p>
+        <p/>
+    	<table border="1">
+    		<tr>
+    			<th>主机</th>
+    			<td>$!{host}</td>
+    		</tr>    	 	
+    		<tr>
+    			<th>监控对象</th>
+    			<td>$!{monitorTarget}</td>
+    		</tr>
+    		<tr>
+    			<th>监控对象信息</th>
+    			<td>$!{monitorTargetDetail}</td>
+    		</tr>
+    		<tr>
+    			<th>最近第一次出问题时间</th>
+    			<td>$!{firstRecentBadTime}</td>
+    		</tr> 
+    		<tr>
+    			<th>最近首次正常时间点</th>
+    			<td>$!{firstRecentGoodTime}</td>
+    		</tr>
+    		<tr>
+    			<th>详细信息</th>
+    			<td>$!{monitorDetails}</td>
+    		</tr>    		   		  		      		 		   		  		   		   		    		
+    	</table>
+    </body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QrtzSimpleTriggers">
+
+	<resultMap id="qrtzSimpleTriggersResult" type="QrtzSimpleTriggers">
+		<result column="TRIGGER_NAME" property="triggerName"/>
+		<result column="TRIGGER_GROUP" property="triggerGroup"/>
+		<result column="REPEAT_COUNT" property="repeatCount" />
+		<result column="REPEAT_INTERVAL" property="repeatInterval" />
+		<result column="TIMES_TRIGGERED" property="timesTriggered" />
+	</resultMap>
+
+	<insert id="insert" parameterType="QrtzSimpleTriggers">
+		INSERT INTO QRTZ_SIMPLE_TRIGGERS
+			(TRIGGER_NAME, TRIGGER_GROUP, REPEAT_COUNT, REPEAT_INTERVAL, TIMES_TRIGGERED)
+		VALUES
+			(#{triggerName}, #{triggerGroup}, #{repeatCount}, #{repeatInterval}, #{timesTriggered})
+	</insert>
+
+	<update id="update" parameterType="QrtzSimpleTriggers">
+		UPDATE
+			QRTZ_SIMPLE_TRIGGERS
+		SET
+			REPEAT_COUNT = #{repeatCount},
+			REPEAT_INTERVAL = #{repeatInterval},
+			TIMES_TRIGGERED = #{timesTriggered}
+		WHERE
+			TRIGGER_GROUP = #{triggerGroup}
+			AND TRIGGER_NAME = #{triggerName}
+	</update>
+
+	<delete id="delete" parameterType="java.util.Map">
+		DELETE FROM
+			QRTZ_SIMPLE_TRIGGERS
+		WHERE
+			TRIGGER_GROUP = #{triggerGroup}
+			AND TRIGGER_NAME = #{triggerName}
+	</delete>
+	
+	<sql id="allColumns">
+			TRIGGER_NAME,
+			TRIGGER_GROUP,
+			REPEAT_COUNT,
+			REPEAT_INTERVAL,
+			TIMES_TRIGGERED
+	</sql>	
+	
+	<select id="select" parameterType="java.util.Map" resultMap="qrtzSimpleTriggersResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			QRTZ_SIMPLE_TRIGGERS
+		WHERE
+			TRIGGER_GROUP = #{triggerGroup}
+			AND TRIGGER_NAME = #{triggerName}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="triggerGroup != null and triggerGroup != ''">
+			 TRIGGER_GROUP = #{triggerGroup}
+		</if>
+		<if test="triggerName != null and triggerName != ''">
+			AND TRIGGER_NAME = #{triggerName}
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == ''">
+			TRIGGER_GROUP ASC, TRIGGER_NAME ASC
+		</if>
+	</sql>
+
+
+	<select id="list" parameterType="QrtzSimpleTriggersCriteria" resultMap="qrtzSimpleTriggersResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			QRTZ_SIMPLE_TRIGGERS
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="QrtzSimpleTriggersCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			QRTZ_SIMPLE_TRIGGERS
+		<include refid="criteriaWhereClause"/>
+	</select>
+
+</mapper>

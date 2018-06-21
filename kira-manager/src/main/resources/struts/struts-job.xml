@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="job" namespace="/job" extends="kira-base">
+		<action name="list"
+			class="com.yihaodian.architecture.kira.manager.action.JobAction"
+			method="list">
+		</action>
+		<action name="listOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.JobAction"
+			method="listOnPage">
+		</action>
+		<action name="getJobDetailDataListOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.JobAction"
+			method="getJobDetailDataListOnPage">
+		</action>
+		<action name="getJobDetailDataListForJobsBeingProcessedOnPage"
+			class="com.yihaodian.architecture.kira.manager.action.JobAction"
+			method="getJobDetailDataListForJobsBeingProcessedOnPage">
+		</action>
+		<action name="manuallyReRunJob"
+			class="com.yihaodian.architecture.kira.manager.action.JobAction"
+			method="manuallyReRunJob">
+		</action>		
+		<action name="cancelJob"
+			class="com.yihaodian.architecture.kira.manager.action.JobAction"
+			method="cancelJob">
+		</action>		
+		<!--<action name="archiveForJobData"-->
+			<!--class="com.yihaodian.architecture.kira.manager.action.JobAction"-->
+			<!--method="archiveForJobData">-->
+		<!--</action>						-->
+	</package>
+</struts>

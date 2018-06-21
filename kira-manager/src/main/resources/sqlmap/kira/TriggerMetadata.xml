@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TriggerMetadata">
+
+	<resultMap id="triggerMetadataResult" type="TriggerMetadata">
+		<result column="id" property="id" />
+		<result column="app_id" property="appId" />
+		<result column="trigger_id" property="triggerId" />
+		<result column="version" property="version" />
+		<result column="priority" property="priority" />
+		<result column="manually_created" property="manuallyCreated" />
+		<result column="manually_created_by" property="manuallyCreatedBy" />
+		<result column="target_app_id" property="targetAppId" />
+		<result column="target_trigger_id" property="targetTriggerId" />
+		<result column="target_method" property="targetMethod" />
+		<result column="target_method_argTypes" property="targetMethodArgTypes" />
+		<result column="trigger_type" property="triggerType" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="start_delay" property="startDelay" />
+		<result column="repeat_count" property="repeatCount" />
+		<result column="repeat_interval" property="repeatInterval" />
+		<result column="cron_expression" property="cronExpression" />
+		<result column="description" property="description" />
+		<result column="misfire_instruction" property="misfireInstruction" />
+		<result column="asynchronous" property="asynchronous" />
+		<result column="only_run_on_single_process" property="onlyRunOnSingleProcess" />
+		<result column="locations_to_run_job" property="locationsToRunJob" />
+		<result column="limit_to_specified_locations" property="limitToSpecifiedLocations" />
+		<result column="scheduled_locally" property="scheduledLocally" />
+		<result column="disabled" property="disabled" />
+		<result column="requests_recovery" property="requestsRecovery" />
+		<result column="arguments_as_json_array_string" property="argumentsAsJsonArrayString" />
+		<result column="concurrent" property="concurrent" />
+		<result column="unregistered" property="unregistered" />
+		<result column="unregistered_update_time" property="unregisteredUpdateTime" />
+		<result column="deleted" property="deleted" />
+		<result column="deleted_update_time" property="deletedUpdateTime" />
+		<result column="create_time" property="createTime" />
+		<result column="finalized_time" property="finalizedTime" />
+		<result column="rum_time_threshold" property="runTimeThreshold" />
+		<result column="copy_from_master_to_slave_zone" property="copyFromMasterToSlaveZone" />
+		<result column="only_scheduled_in_master_zone" property="onlyScheduledInMasterZone" />
+		<result column="job_dispatch_timeout_enabled" property="jobDispatchTimeoutEnabled" />
+		<result column="job_dispatch_timeout" property="jobDispatchTimeout" />
+		<result column="comments" property="comments" />
+	</resultMap>
+	
+	<resultMap id="triggerIdentityResult" type="TriggerIdentity">
+		<result column="app_id" property="appId" />
+		<result column="trigger_id" property="triggerId" />
+		<result column="version" property="version" />
+	</resultMap>	
+	
+	<resultMap id="triggerIdentityResultWithoutVersion" type="TriggerIdentity">
+		<result column="app_id" property="appId" />
+		<result column="trigger_id" property="triggerId" />
+	</resultMap>		
+
+	<insert id="insert" parameterType="TriggerMetadata">
+		INSERT INTO trigger_metadata
+		(id, app_id, trigger_id, version, priority,
+		manually_created, manually_created_by, target_app_id, target_trigger_id,
+		target_method, target_method_argTypes, trigger_type, start_time, end_time, start_delay, repeat_count,
+		repeat_interval, cron_expression, description, misfire_instruction, asynchronous,
+		only_run_on_single_process, locations_to_run_job, limit_to_specified_locations, scheduled_locally,
+		disabled, requests_recovery, arguments_as_json_array_string, concurrent, unregistered, unregistered_update_time, deleted,
+		deleted_update_time, create_time, finalized_time, rum_time_threshold, copy_from_master_to_slave_zone, only_scheduled_in_master_zone,
+		job_dispatch_timeout_enabled, job_dispatch_timeout, comments)
+		VALUES
+		(#{id}, #{appId}, #{triggerId}, #{version}, #{priority},
+		#{manuallyCreated}, #{manuallyCreatedBy}, #{targetAppId}, #{targetTriggerId},
+		#{targetMethod}, #{targetMethodArgTypes}, #{triggerType}, #{startTime}, #{endTime}, #{startDelay}, #{repeatCount},
+		#{repeatInterval}, #{cronExpression}, #{description}, #{misfireInstruction}, #{asynchronous},
+		#{onlyRunOnSingleProcess}, #{locationsToRunJob}, #{limitToSpecifiedLocations}, #{scheduledLocally},
+		#{disabled}, #{requestsRecovery}, #{argumentsAsJsonArrayString}, #{concurrent}, #{unregistered}, #{unregisteredUpdateTime}, #{deleted},
+		#{deletedUpdateTime}, #{createTime}, #{finalizedTime}, #{runTimeThreshold}, #{copyFromMasterToSlaveZone}, #{onlyScheduledInMasterZone},
+		#{jobDispatchTimeoutEnabled}, #{jobDispatchTimeout}, #{comments})
+		<selectKey resultType="Long" keyProperty="id">
+           SELECT LAST_INSERT_ID()  
+        </selectKey> 		
+	</insert>
+
+	<update id="update" parameterType="TriggerMetadata">
+		UPDATE
+		trigger_metadata
+		SET
+		app_id = #{appId},
+		trigger_id = #{triggerId},
+		version = #{version},
+		priority = #{priority},
+		manually_created = #{manuallyCreated},
+		manually_created_by = #{manuallyCreatedBy},
+		target_app_id = #{targetAppId},
+		target_trigger_id = #{targetTriggerId},
+		target_method = #{targetMethod},
+		target_method_argTypes = #{targetMethodArgTypes},
+		trigger_type = #{triggerType},
+		start_time = #{startTime},
+		end_time = #{endTime},
+		start_delay = #{startDelay},
+		repeat_count = #{repeatCount},
+		repeat_interval = #{repeatInterval},
+		cron_expression = #{cronExpression},
+		description = #{description},
+		misfire_instruction = #{misfireInstruction},
+		asynchronous = #{asynchronous},
+		only_run_on_single_process = #{onlyRunOnSingleProcess},
+		locations_to_run_job = #{locationsToRunJob},
+		limit_to_specified_locations = #{limitToSpecifiedLocations},
+		scheduled_locally = #{scheduledLocally},
+		disabled = #{disabled},
+		requests_recovery = #{requestsRecovery},
+		arguments_as_json_array_string = #{argumentsAsJsonArrayString},
+		concurrent = #{concurrent},
+		unregistered = #{unregistered},
+		unregistered_update_time = #{unregisteredUpdateTime},
+		deleted = #{deleted},
+		deleted_update_time = #{deletedUpdateTime},
+		create_time = #{createTime},
+		finalized_time = #{finalizedTime},
+		rum_time_threshold = #{runTimeThreshold},
+		copy_from_master_to_slave_zone = #{copyFromMasterToSlaveZone},
+		only_scheduled_in_master_zone = #{onlyScheduledInMasterZone},
+		job_dispatch_timeout_enabled = #{jobDispatchTimeoutEnabled},
+		job_dispatch_timeout = #{jobDispatchTimeout},
+		comments = #{comments}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM
+		trigger_metadata
+		WHERE
+		id = #{id}
+	</delete>
+	
+	<sql id="allColumns">
+		id,
+		app_id,
+		trigger_id,
+		version,
+		priority,
+		manually_created,
+		manually_created_by,
+		target_app_id,
+		target_trigger_id,
+		target_method,
+		target_method_argTypes,
+		trigger_type,
+		start_time,
+		end_time,
+		start_delay,
+		repeat_count,
+		repeat_interval,
+		cron_expression,
+		description,
+		misfire_instruction,
+		asynchronous,
+		only_run_on_single_process,
+		locations_to_run_job,
+		limit_to_specified_locations,
+		scheduled_locally,
+		disabled,
+		requests_recovery,
+		arguments_as_json_array_string,
+		concurrent,
+		unregistered,
+		unregistered_update_time,
+		deleted,
+		deleted_update_time,
+		create_time,
+		finalized_time,
+		rum_time_threshold,
+		copy_from_master_to_slave_zone,
+		only_scheduled_in_master_zone,
+		job_dispatch_timeout_enabled,
+		job_dispatch_timeout,
+		comments
+	</sql>
+
+	<select id="select" parameterType="java.lang.Long" resultMap="triggerMetadataResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		trigger_metadata
+		WHERE
+		id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="id != null and id != '' ">
+			 id = #{id}
+		</if>
+		<if test="appId != null and appId != '' ">
+			AND app_id = #{appId}
+		</if>
+		<if test="triggerId != null and triggerId != '' ">
+			AND trigger_id = #{triggerId}
+		</if>
+		<if test="version != null and version != '' ">
+			AND version = #{version}
+		</if>
+		<if test="manuallyCreated != null ">
+			AND manually_created = #{manuallyCreated}
+		</if>
+		<if test="unregistered != null ">
+			AND unregistered = #{unregistered}
+		</if>
+		<if test="deleted != null ">
+			AND deleted = #{deleted}
+		</if>
+		<if test="poolIdListToExclude != null and poolIdListToExclude.size > 0 ">
+			AND app_id not in
+			<foreach index="index" collection = "poolIdListToExclude" item="poolIdListToExclude" open = "(" close = ")" separator = ",">
+				#{poolIdListToExclude}
+			</foreach>
+		</if>
+		<if test="canBeScheduled != null ">
+			AND <if test="canBeScheduled == false">
+				(scheduled_locally=0 or disabled=0)
+			</if>
+			<if test="canBeScheduled == true">
+				(scheduled_locally=0 and disabled=0)
+			</if>
+		</if>
+		<if test="requestsRecovery != null ">
+			AND requests_recovery = #{requestsRecovery}
+		</if>
+		<if test="copyFromMasterToSlaveZone != null ">
+			AND copy_from_master_to_slave_zone = #{copyFromMasterToSlaveZone}
+		</if>
+		<if test="onlyScheduledInMasterZone != null ">
+			AND only_scheduled_in_master_zone = #{onlyScheduledInMasterZone}
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != '' ">
+			${orderByClause}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == '' ">
+			create_time DESC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerMetadataResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		trigger_metadata
+		<include refid="criteriaWhereClause" />
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="TriggerMetadataCriteria"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			select * from trigger_metadata
+			<include refid="criteriaWhereClause" />
+		) as t
+	</select>
+	
+	<select id="getLatestAndAvailableTriggerMetadata" parameterType="java.util.Map" resultMap="triggerMetadataResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		trigger_metadata
+		WHERE app_id=#{appId} and trigger_id=#{triggerId} and unregistered=0 and deleted=0
+		<if test="version != null and version != ''">
+			AND version = #{version}
+		</if>
+		order by create_time desc limit 1
+	</select>	
+	
+	<select id="listLatest" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerMetadataResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		(
+			select * from trigger_metadata
+			where (app_id,trigger_id,create_time) in (
+				SELECT app_id,trigger_id,max(create_time) create_time FROM trigger_metadata where unregistered=0 and deleted=0
+		group by app_id,trigger_id
+			)			
+		) as t
+		<include refid="criteriaWhereClause" />
+		<include refid="orderByClause" />
+	</select>
+	
+	<select id="listLatestUsingLimit" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerMetadataResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		(
+			SELECT * FROM trigger_metadata where unregistered=0 and deleted=0 group by app_id,trigger_id
+		) as t
+		<include refid="criteriaWhereClause" />
+		<include refid="orderByClause" />
+		limit #{paging.firstResult}, #{paging.maxResults}
+	</select>	
+	
+	<select id="countLatest" parameterType="TriggerMetadataCriteria"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			SELECT * FROM trigger_metadata where unregistered=0 and deleted=0 group by app_id,trigger_id
+		) as t
+		<include refid="criteriaWhereClause" />
+	</select>
+	
+	<sql id="getTriggerIdentityListWithoutVersionSql">
+		SELECT distinct app_id,trigger_id
+			FROM trigger_metadata
+			<include refid="criteriaWhereClause" />
+			order by app_id,trigger_id
+	</sql>
+	
+	<select id="getTriggerIdentityListWithoutVersion" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerIdentityResultWithoutVersion">
+		<include refid="getTriggerIdentityListWithoutVersionSql" />
+	</select>	
+	
+	<sql id="getTriggerIdentityListSql">
+		SELECT distinct app_id,trigger_id,version
+			FROM trigger_metadata
+			<include refid="criteriaWhereClause" />
+			order by app_id,trigger_id
+	</sql>
+	
+	<select id="getTriggerIdentityList" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerIdentityResult">
+		<include refid="getTriggerIdentityListSql" />
+	</select>	
+	
+	<select id="countTriggerIdentityList" parameterType="TriggerMetadataCriteria"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			<include refid="getTriggerIdentityListSql" />
+		) as t
+	</select>	
+	
+	<select id="getPoolIdList" parameterType="TriggerMetadataCriteria" resultType="string">
+		SELECT distinct	app_id
+		FROM
+		trigger_metadata
+		<include refid="criteriaWhereClause" />
+		order by app_id
+	</select>
+	
+	<select id="getTriggerIdList" parameterType="TriggerMetadataCriteria" resultType="string">
+		SELECT distinct	trigger_id
+		FROM
+		trigger_metadata
+		<include refid="criteriaWhereClause" />
+		order by trigger_id
+	</select>				
+	
+	<update id="updateUnRegisteredStatusForTriggers" parameterType="map">
+		  update trigger_metadata set unregistered=#{unRegistered} , unregistered_update_time=#{unregisteredUpdateTime} WHERE
+		  <if test="triggerIdentityList != null and triggerIdentityList.size > 0 ">
+			   (app_id,trigger_id,version) in
+			  <foreach index="index" collection = "triggerIdentityList" item="triggerIdentityList" open = "(" close = ")" separator = ",">
+				  (#{triggerIdentityList.appId} , #{triggerIdentityList.triggerId}, #{triggerIdentityList.version})
+			  </foreach>
+		  </if>
+	</update>	
+	
+	<update id="updateDeletedStatusForTriggers" parameterType="map">
+		  update trigger_metadata set deleted=#{deleted} , deleted_update_time=#{deletedUpdateTime}, comments=#{comments}
+
+		<if test="triggerIdentityList != null and triggerIdentityList.size > 0 ">
+			WHERE (app_id,trigger_id,version) in
+			<foreach index="index" collection="triggerIdentityList" item = "triggerIdentityList" open = "(" close = ")" separator = ",">
+				(#{triggerIdentityList.appId} , #{triggerIdentityList.triggerId}, #{triggerIdentityList.version})
+			</foreach>
+		</if>
+	</update>	
+	
+	<select id="getLatestAndAvailableTriggerMetadataByJobId" parameterType="java.lang.String" resultMap="triggerMetadataResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		trigger_metadata
+		WHERE (app_id,trigger_id,create_time) in (
+			SELECT trigger_metadata.app_id,trigger_metadata.trigger_id,max(trigger_metadata.create_time) create_time
+				FROM trigger_metadata,job 
+					WHERE job.id=#{jobId} and trigger_metadata.id=job.trigger_metadata_id and trigger_metadata.unregistered=0
+						and trigger_metadata.deleted=0
+						group by trigger_metadata.app_id,trigger_metadata.trigger_id
+		) limit 1
+	</select>	
+	
+	<update id="updateUnRegisteredStatus" parameterType="map">
+		  update trigger_metadata set unregistered=#{unRegistered} , unregistered_update_time=#{unregisteredUpdateTime}
+		 <where>
+			<if test="triggerMetadataCriteria.id != null and triggerMetadataCriteria.id != ''">
+					 id = #{triggerMetadataCriteria.id}
+				</if>
+				<if test="triggerMetadataCriteria.appId != null and triggerMetadataCriteria.appId != ''">
+					AND app_id = #{triggerMetadataCriteria.appId}
+				</if>
+				<if test="triggerMetadataCriteria.triggerId != null and triggerMetadataCriteria.triggerId != ''">
+					AND trigger_id = #{triggerMetadataCriteria.triggerId}
+				</if>
+				<if test="triggerMetadataCriteria.version != null and triggerMetadataCriteria.version != ''">
+					AND version = #{triggerMetadataCriteria.version}
+				</if>
+				<if test="triggerMetadataCriteria.unregistered != null and triggerMetadataCriteria.unregistered != ''">
+					AND unregistered = #{triggerMetadataCriteria.unregistered}
+				</if>
+				<if test="triggerMetadataCriteria.deleted != null and triggerMetadataCriteria.deleted != ''">
+					AND deleted = #{triggerMetadataCriteria.deleted}
+				</if>
+		 </where>
+	</update>
+	
+	<select id="getPoolIdListOfTriggersWhichHasNoKiraClientMetadata" resultType="string">
+		SELECT distinct	t.app_id
+		FROM
+		trigger_metadata t
+		 where t.unregistered=0 and t.deleted=0 and t.app_id not in (select distinct k.app_id from kira_client_metadata k)
+		order by t.app_id
+	</select>	
+	
+	<sql id="getLatestTriggerMetadatasWhichSetTriggerAsTargetSql">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		trigger_metadata
+		where target_app_id = #{appId} and target_trigger_id = #{triggerId} and unregistered=0 and deleted=0
+	</sql>	
+	
+	<select id="getLatestTriggerMetadatasWhichSetTriggerAsTarget" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerMetadataResult">
+		<include refid="getLatestTriggerMetadatasWhichSetTriggerAsTargetSql" />
+		order by app_id,trigger_id
+	</select>	
+	
+	<select id="countLatestTriggerMetadatasWhichSetTriggerAsTarget" parameterType="TriggerMetadataCriteria"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			<include refid="getLatestTriggerMetadatasWhichSetTriggerAsTargetSql" />
+		) as t
+	</select>
+	
+	<sql id="getLatestTriggerMetadatasWhichSetTriggersOfPoolAsTargetSql">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		trigger_metadata
+		where target_app_id = #{appId} and unregistered=0 and deleted=0
+	</sql>		
+	
+	<select id="getLatestTriggerMetadatasWhichSetTriggersOfPoolAsTarget" parameterType="TriggerMetadataCriteria"
+		resultMap="triggerMetadataResult">
+		<include refid="getLatestTriggerMetadatasWhichSetTriggersOfPoolAsTargetSql" />
+		order by app_id,trigger_id
+	</select>
+	
+	<select id="countLatestTriggerMetadatasWhichSetTriggersOfPoolAsTarget" parameterType="TriggerMetadataCriteria"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			<include refid="getLatestTriggerMetadatasWhichSetTriggersOfPoolAsTargetSql" />
+		) as t
+	</select>
+	
+	<select id="getTriggerIdentityListWhichShouldBeUnScheduledWithoutVersion" parameterType="java.util.Map" resultMap="triggerIdentityResultWithoutVersion">
+		SELECT distinct a.app_id, a.trigger_id
+			FROM timer_trigger_schedule a
+			WHERE NOT EXISTS
+				(
+					select 1 from trigger_metadata b 
+					where b.unregistered=0 and b.deleted=0 and b.scheduled_locally=0 and b.disabled=0 and a.app_id = b.app_id
+		and a.trigger_id = b.trigger_id
+			  <if test="masterZone != null and masterZone != ''">
+				  <if test="masterZone == false">
+					AND  b.only_scheduled_in_master_zone = 0
+				  </if>
+			  </if>
+				)
+			order by a.app_id, a.trigger_id
+	</select>	
+	
+	<select id="getTriggerIdentityListWhichShouldBeScheduledWithoutVersion" parameterType="java.util.Map" resultMap="triggerIdentityResultWithoutVersion">
+		SELECT distinct a.app_id, a.trigger_id
+			FROM trigger_metadata a 
+			WHERE a.unregistered=0 and a.deleted=0 and a.scheduled_locally=0 and a.disabled=0
+			<if test="masterZone != null and masterZone != ''">
+				<if test="masterZone == false">
+					AND  b.only_scheduled_in_master_zone = 0
+				</if>
+			</if>
+				and NOT EXISTS
+				(
+					select 1 from timer_trigger_schedule b 
+					where a.app_id = b.app_id and a.trigger_id = b.trigger_id
+				)
+			order by a.app_id, a.trigger_id
+	</select>
+	
+	<update id="updateCrossMultiZoneData" parameterType="map">
+		  update trigger_metadata set id = id
+				<if test="copyFromMasterToSlaveZone != null and  copyFromMasterToSlaveZone != ''">
+					 , copy_from_master_to_slave_zone=#{copyFromMasterToSlaveZone}
+				</if>
+				<if test="onlyScheduledInMasterZone != null and onlyScheduledInMasterZone != ''">
+					 , only_scheduled_in_master_zone=#{onlyScheduledInMasterZone}
+				</if>
+				<if test="comments != null and  comments != ''">
+					, comments=#{comments}
+				</if>
+			where app_id = #{appId} and trigger_id = #{triggerId} and version = #{version}
+	</update>						
+
+</mapper>

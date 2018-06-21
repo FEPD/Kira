@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="HdcMenu">
+
+	<resultMap id="hdcMenuResult" type="HdcMenu">
+		<result column="id" property="id"/>
+		<result column="pid" property="pid"/>
+		<result column="code" property="code"/>
+		<result column="name" property="name"/>
+		<result column="url" property="url"/>
+		<result column="app" property="app"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="HdcMenu">
+		INSERT INTO hdc_menu
+			(id, pid, code, name, url, app)
+		VALUES
+			(#{id}, #{pid}, #{code}, #{name}, #{url}, #{app})
+		<selectKey resultType="Integer" keyProperty="id">
+           SELECT LAST_INSERT_ID()
+        </selectKey>			
+	</insert>
+
+	<update id="update" parameterType="HdcMenu">
+		UPDATE
+			hdc_menu
+		SET
+			pid = #{pid},
+			code = #{code},
+			name = #{name},
+			url = #{url},
+			app = #{app}
+		WHERE
+			id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE FROM
+			hdc_menu
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="select" parameterType="java.lang.Integer" resultMap="hdcMenuResult">
+		SELECT
+			id,
+			pid,
+			code,
+			name,
+			url,
+			app
+		FROM
+			hdc_menu
+		WHERE
+			id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+			<if test="id != null and id != ''">
+				id = #{id}
+			</if>
+			<if test="app != null and app != ''" >
+				AND app = #{app}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClaus}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == ''">
+			 id 	ASC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="HdcMenuCriteria" resultMap="hdcMenuResult">
+		SELECT
+			id,
+			pid,
+			code,
+			name,
+			url,
+			app
+		FROM
+			hdc_menu
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="HdcMenuCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			hdc_menu
+		<include refid="criteriaWhereClause"/>
+	</select>
+
+</mapper>

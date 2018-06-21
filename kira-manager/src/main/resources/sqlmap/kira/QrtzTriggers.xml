@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QrtzTriggers">
+
+	<resultMap id="qrtzTriggersResult" type="QrtzTriggers">
+		<result column="TRIGGER_NAME" property="triggerName"/>
+		<result column="TRIGGER_GROUP" property="triggerGroup"/>
+		<result column="JOB_NAME" property="jobName"/>
+		<result column="JOB_GROUP" property="jobGroup"/>
+		<result column="IS_VOLATILE" property="isVolatile"/>
+		<result column="DESCRIPTION" property="description"/>
+		<result column="NEXT_FIRE_TIME" property="nextFireTime" />
+		<result column="PREV_FIRE_TIME" property="prevFireTime" />
+		<result column="PRIORITY" property="priority" />
+		<result column="TRIGGER_STATE" property="triggerState"/>
+		<result column="TRIGGER_TYPE" property="triggerType"/>
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="CALENDAR_NAME" property="calendarName"/>
+		<result column="MISFIRE_INSTR" property="misfireInstr" />
+		<result column="JOB_DATA" property="jobData" jdbcType="BLOB"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="QrtzTriggers">
+		INSERT INTO QRTZ_TRIGGERS
+			(TRIGGER_NAME, TRIGGER_GROUP, JOB_NAME, JOB_GROUP, IS_VOLATILE, DESCRIPTION, NEXT_FIRE_TIME, PREV_FIRE_TIME, PRIORITY, TRIGGER_STATE,
+			TRIGGER_TYPE, START_TIME, END_TIME, CALENDAR_NAME, MISFIRE_INSTR, JOB_DATA)
+		VALUES
+			(#{triggerName}, #{triggerGroup}, #{jobName}, #{jobGroup}, #{isVolatile}, #{description},
+			#{nextFireTime}, #{prevFireTime}, #{priority}, #{triggerState}, #{triggerType}, #{startTime},
+			 #{endTime}, #{calendarName}, #{misfireInstr}, #{jobData})
+	</insert>
+
+	<update id="update" parameterType="QrtzTriggers">
+		UPDATE
+			QRTZ_TRIGGERS
+		SET
+			JOB_NAME = #{jobName},
+			JOB_GROUP = #{jobGroup},
+			IS_VOLATILE = #{isVolatile},
+			DESCRIPTION = #{description},
+			NEXT_FIRE_TIME = #{nextFireTime},
+			PREV_FIRE_TIME = #{prevFireTime},
+			PRIORITY = #{priority},
+			TRIGGER_STATE = #{triggerState},
+			TRIGGER_TYPE = #{triggerType},
+			START_TIME = #{startTime},
+			END_TIME = #{endTime},
+			CALENDAR_NAME = #{calendarName},
+			MISFIRE_INSTR = #{misfireInstr},
+			JOB_DATA = #{jobData}
+		WHERE
+			TRIGGER_GROUP = #{triggerGroup}
+			AND TRIGGER_NAME = #{triggerName}
+	</update>
+
+	<delete id="delete" parameterType="java.util.Map">
+		DELETE FROM
+			QRTZ_TRIGGERS
+		WHERE
+			TRIGGER_GROUP = #{triggerGroup}
+			AND TRIGGER_NAME = #{triggerName}
+	</delete>
+	
+	<sql id="allColumns">
+			TRIGGER_NAME,
+			TRIGGER_GROUP,
+			JOB_NAME,
+			JOB_GROUP,
+			IS_VOLATILE,
+			DESCRIPTION,
+			NEXT_FIRE_TIME,
+			PREV_FIRE_TIME,
+			PRIORITY,
+			TRIGGER_STATE,
+			TRIGGER_TYPE,
+			START_TIME,
+			END_TIME,
+			CALENDAR_NAME,
+			MISFIRE_INSTR,
+			JOB_DATA
+	</sql>	
+	
+	<select id="select" parameterType="java.util.Map" resultMap="qrtzTriggersResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			QRTZ_TRIGGERS
+		WHERE
+			TRIGGER_GROUP = #{triggerGroup}
+			AND TRIGGER_NAME = #{triggerName}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="triggerGroup != null and triggerGroup != ''">
+			 TRIGGER_GROUP = #{triggerGroup}
+		</if>
+		<if test="triggerName != null and triggerName != ''">
+			AND TRIGGER_NAME = #{triggerName}
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == ''">
+			TRIGGER_GROUP ASC, TRIGGER_NAME ASC
+		</if>
+	</sql>
+
+
+	<select id="list" parameterType="QrtzTriggersCriteria" resultMap="qrtzTriggersResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			QRTZ_TRIGGERS
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="QrtzTriggersCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			QRTZ_TRIGGERS
+		<include refid="criteriaWhereClause"/>
+	</select>
+	
+	<select id="listCanBeScheduled" parameterType="QrtzTriggersCriteria" resultMap="qrtzTriggersResult">
+		SELECT
+			a.TRIGGER_NAME,
+			a.TRIGGER_GROUP,
+			a.JOB_NAME,
+			a.JOB_GROUP,
+			a.IS_VOLATILE,
+			a.DESCRIPTION,
+			a.NEXT_FIRE_TIME,
+			a.PREV_FIRE_TIME,
+			a.PRIORITY,
+			a.TRIGGER_STATE,
+			a.TRIGGER_TYPE,
+			a.START_TIME,
+			a.END_TIME,
+			a.CALENDAR_NAME,
+			a.MISFIRE_INSTR,
+			NULL as JOB_DATA
+		FROM
+			QRTZ_TRIGGERS a WHERE EXISTS
+			(
+					select 1 from trigger_metadata b 
+					where a.TRIGGER_GROUP = b.app_id and a.TRIGGER_NAME = b.trigger_id	and b.unregistered=0 and b.deleted=0
+					and b.scheduled_locally=0 and b.disabled=0
+			)
+		order by a.TRIGGER_GROUP ASC, a.TRIGGER_NAME ASC
+	</select>	
+
+</mapper>

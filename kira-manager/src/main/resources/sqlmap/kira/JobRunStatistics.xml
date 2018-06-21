@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobRunStatistics">
+
+	<resultMap id="jobRunStatisticsResult" type="JobRunStatistics">
+		<result column="id" property="id"/>
+		<result column="app_id" property="appId"/>
+		<result column="trigger_id" property="triggerId"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="sample_count" property="sampleCount"/>
+		<result column="max_in_seconds" property="maxInSeconds"/>
+		<result column="min_in_seconds" property="minInSeconds"/>
+		<result column="avg_in_seconds" property="avgInSeconds"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="JobRunStatistics">
+		INSERT INTO job_run_statistics
+			(id, app_id, trigger_id, begin_time, end_time, sample_count, max_in_seconds, min_in_seconds, avg_in_seconds, create_time)
+		VALUES
+			(#{id}, #{appId}, #{triggerId}, #{beginTime}, #{endTime}, #{sampleCount}, #{maxInSeconds}, #{minInSeconds}, #{avgInSeconds}, #{createTime})
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="update" parameterType="JobRunStatistics">
+		UPDATE
+			job_run_statistics
+		SET
+			app_id = #{appId},
+			trigger_id = #{triggerId},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
+			sample_count = #{sampleCount},
+			max_in_seconds = #{maxInSeconds},
+			min_in_seconds = #{minInSeconds},
+			avg_in_seconds = #{avgInSeconds},
+			create_time = #{createTime}
+		WHERE
+			id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM
+			job_run_statistics
+		WHERE
+			id = #{id}
+	</delete>
+
+	<sql id="allColumns">
+		id,
+		app_id,
+		trigger_id,
+		begin_time,
+		end_time,
+		sample_count,
+		max_in_seconds,
+		min_in_seconds,
+		avg_in_seconds,
+		create_time
+	</sql>
+	
+	<select id="select" parameterType="java.lang.Long" resultMap="jobRunStatisticsResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			job_run_statistics
+		WHERE
+			id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+
+		<where>
+			<if test="id != null and id != ''">
+					id = #{id}
+			</if>
+			<if test="appId != null and appId != null">
+				AND app_id = #{appId}
+			</if>
+			<if test="poolIdList != null and poolIdList.size > 0 ">
+				AND
+				app_id in
+				<foreach collection = "poolIdList" index="index" item = "poolIdList" open = "(" close = ")" separator= ",">
+					#{poolIdList}
+				</foreach>
+			</if>
+			<if test="triggerId != null and triggerId != null">
+				AND triggerId = #{triggerId}
+			</if>
+			<if test="triggerIdList != null and triggerIdList.size > 0 ">
+				AND
+				trigger_id in
+				<foreach collection = "triggerIdList" index = "index" item = "triggerIdList" open = "(" close = ")" separator= ",">
+					#{triggerIdList}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		ORDER  BY
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+		<if test="orderByClause == null">
+			app_id ASC,trigger_id ASC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="JobRunStatisticsCriteria" resultMap="jobRunStatisticsResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			job_run_statistics
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="listUsingLimit" parameterType="JobRunStatisticsCriteria" resultMap="jobRunStatisticsResult">
+		SELECT
+		<include refid="allColumns" />
+		FROM
+		job_run_statistics
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+		limit #{paging.firstResult}, #{paging.maxResults}
+	</select>
+
+	<select id="count" parameterType="JobRunStatisticsCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			job_run_statistics
+		<include refid="criteriaWhereClause"/>
+	</select>
+
+	<insert id="doJobRunStatistics" parameterType="map">
+		<![CDATA[
+		INSERT INTO job_run_statistics
+			(app_id, trigger_id, begin_time, end_time, sample_count, max_in_seconds, min_in_seconds, avg_in_seconds, create_time)
+			SELECT app_id, trigger_id, begin_time, end_time, sample_count, max_in_seconds, min_in_seconds, avg_in_seconds, create_time FROM
+				(
+					SELECT statistics.app_id , statistics.trigger_id, #{beginTime} as begin_time, #{endTime} as end_time, count(*) as sample_count,
+					max(statistics.runtime_in_seconds) as max_in_seconds, min(statistics.runtime_in_seconds) as min_in_seconds,
+					CAST(avg(statistics.runtime_in_seconds) AS signed) as avg_in_seconds , #{createTime} as create_time
+					FROM (
+						select job.app_id, job.trigger_id, (UNIX_TIMESTAMP(job.last_update_time) - UNIX_TIMESTAMP(job.create_time))
+						as runtime_in_seconds
+						from job
+						where job.app_id = #{appId} and job.trigger_id = #{triggerId}
+						and job.create_time >= #{beginTime} and job.create_time < #{endTime}
+						and job.job_status_id=10
+						order by job.create_time desc limit #{maxSampleCount}
+						) as statistics
+					GROUP BY statistics.app_id,statistics.trigger_id
+				) as finalResult
+		ON DUPLICATE KEY UPDATE
+			app_id = finalResult.app_id,
+			trigger_id = finalResult.trigger_id,
+			begin_time = finalResult.begin_time,
+			end_time = finalResult.end_time,
+			sample_count = finalResult.sample_count,
+			max_in_seconds = finalResult.max_in_seconds,
+			min_in_seconds = finalResult.min_in_seconds,
+			avg_in_seconds = finalResult.avg_in_seconds,
+			create_time = finalResult.create_time
+		]]>
+		<selectKey resultType="Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<!--<insert id="doJobRunStatistics" parameterClass="map">-->
+		<!--<![CDATA[-->
+		<!--REPLACE INTO job_run_statistics-->
+			<!--(pool_id, trigger_id, begin_time, end_time, sample_count, max_in_seconds, min_in_seconds, avg_in_seconds, create_time)-->
+		<!--SELECT statistics.pool_id , statistics.trigger_id, #beginTime# as begin_time, #endTime# as end_time, count(*) as sample_count, max(statistics.runtime_in_seconds) as max_in_seconds, min(statistics.runtime_in_seconds) as min_in_seconds, CAST(avg(statistics.runtime_in_seconds) AS signed) as avg_in_seconds , #createTime# as create_time-->
+			<!--FROM (-->
+					<!--select job.pool_id, job.trigger_id, (UNIX_TIMESTAMP(job.last_update_time) - UNIX_TIMESTAMP(job.create_time)) as runtime_in_seconds-->
+					<!--from job-->
+					<!--where job.pool_id = #poolId# and job.trigger_id = #triggerId#-->
+					<!--and job.create_time >= #beginTime# and job.create_time < #endTime#-->
+					<!--and job.job_status_id=10-->
+					<!--order by job.create_time desc limit #maxSampleCount#-->
+				<!--) as statistics-->
+			<!--GROUP BY statistics.pool_id,statistics.trigger_id-->
+		<!--]]>-->
+		<!--<selectKey resultClass="Long" keyProperty="id">-->
+			<!--SELECT LAST_INSERT_ID()-->
+		<!--</selectKey>-->
+	<!--</insert>-->
+
+	<!--<insert id="doJobRunStatistics" parameterClass="map">-->
+		<!--<![CDATA[-->
+		<!--REPLACE INTO job_run_statistics-->
+			<!--(pool_id, trigger_id, begin_time, end_time, sample_count, max_in_seconds, min_in_seconds, avg_in_seconds, create_time)-->
+		<!--SELECT statistics.pool_id , statistics.trigger_id, #beginTime# as begin_time, #endTime# as end_time, count(*) as sample_count, max(statistics.runtime_in_seconds) as max_in_seconds, min(statistics.runtime_in_seconds) as min_in_seconds, CAST(avg(statistics.runtime_in_seconds) AS signed) as avg_in_seconds , #createTime# as create_time-->
+			<!--FROM (-->
+					<!--select trigger_metadata.pool_id, trigger_metadata.trigger_id, (UNIX_TIMESTAMP(job.last_update_time) - UNIX_TIMESTAMP(job.create_time)) as runtime_in_seconds-->
+					<!--from job, trigger_metadata-->
+					<!--where job.trigger_metadata_id=trigger_metadata.id-->
+					<!--and exists (select 1 from trigger_metadata t where job.trigger_metadata_id=t.id and t.pool_id = #poolId# and t.trigger_id = #triggerId#)-->
+					<!--and job.create_time >= #beginTime# and job.create_time < #endTime#-->
+					<!--and job.job_status_id=10-->
+					<!--order by job.create_time desc limit #maxSampleCount#-->
+				<!--) as statistics-->
+			<!--GROUP BY statistics.pool_id,statistics.trigger_id-->
+		<!--]]>-->
+		<!--<selectKey resultClass="Long" keyProperty="id">-->
+			<!--SELECT LAST_INSERT_ID()-->
+		<!--</selectKey>-->
+	<!--</insert>-->
+
+</mapper>

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>[Kira]-[$!{env}环境]-定时任务执行超时报警!</title>
+		<style type="text/css">
+			th {
+					width:20%;
+					background-color:#E5EEF8;
+					font-weight:bold;
+					text-align:left;
+				}
+		</style>     
+    </head>
+    <body>
+        <p>
+           <a href="$!{kiraManagerUrlPath}">Kira平台($!{env}环境)入口</a>
+        </p>
+        <p/>
+    	<table border="1">
+    		<tr>
+    			<th>jobId</th>
+    			<td>$!{jobTimeoutAlarmMessage.jobId}</td>
+    		</tr>    	 	
+    		<tr>
+    			<th>AppId</th>
+    			<td>$!{jobTimeoutAlarmMessage.appId}</td>
+    		</tr>
+    		<tr>
+    			<th>定时任务Id</th>
+    			<td>$!{jobTimeoutAlarmMessage.triggerId}</td>
+    		</tr>
+    		<tr>
+    			<th>定时任务版本</th>
+    			<td>$!{jobTimeoutAlarmMessage.triggerVersion}</td>
+    		</tr> 
+    		<tr>
+    			<th>定时任务描述信息</th>
+    			<td>$!{jobTimeoutAlarmMessage.triggerDescription}</td>
+    		</tr>
+    		<tr>
+    			<th>定时任务运行时间阀值（即任务最大的预计执行耗时）（毫秒）</th>
+    			<td>$!{jobTimeoutAlarmMessage.rumTimeThreshold}</td>
+    		</tr>    		 
+    		<tr>
+    			<th>定时任务执行开始时间</th>
+    			<td>$!{jobTimeoutAlarmMessage.jobCreateTimeAsString}</td>
+    		</tr>
+    		<tr>
+    			<th>定时任务执行当前状态</th>
+    			<td>$!{jobTimeoutAlarmMessage.jobStatusName}</td>
+    		</tr>    		
+    		<tr>
+    			<th>定时任务执行是否手动触发</th>
+    			<td>$!{jobTimeoutAlarmMessage.manuallyScheduled}</td>
+    		</tr>    		  
+    		<tr>
+    			<th>定时任务执行触发者</th>
+    			<td>$!{jobTimeoutAlarmMessage.createdBy}</td>
+    		</tr>    
+    		<tr>
+    			<th>定时任务执行相关信息</th>
+    			<td>$!{jobTimeoutAlarmMessage.alarmMessage}</td>
+    		</tr>     		 		   		  		   		   		    		
+    	</table>
+    </body>
+</html>

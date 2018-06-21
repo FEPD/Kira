@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+  <!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+	<bean id="kiraTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="jdbcDataSource" />
+		</property>
+	</bean>	
+	
+    <tx:advice id="triggerMetadataServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>       
+        	<tx:method name="registerTriggerMetadataZNode"  propagation="REQUIRED" rollback-for="Exception"/>
+<!-- 	        <tx:method name="registerTriggerMetadataZNodeDataList"  propagation="REQUIRED" rollback-for="Exception"/> -->
+	        <tx:method name="registerTriggerMetadataZNodeDataList"  propagation="REQUIRES_NEW" rollback-for="Exception"/>
+<!-- 	        <tx:method name="doDeleteTrigger"  propagation="REQUIRED" rollback-for="Exception"/> -->
+<!-- 	        <tx:method name="deleteTrigger"  propagation="REQUIRED" rollback-for="Exception"/> -->
+	        <tx:method name="doDeleteTrigger" isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="deleteTrigger"  isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="unRegisterTrigger"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="registerTrigger"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="handleTriggerZKDataChange"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doRescheduleJob"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="rescheduleJob"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="scheduleTrigger"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="scheduleJobIfNeeded"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="updateDeletedStatusForTriggers"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="createAndRunJobByTriggerMetadata"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="manuallyRunJobByTriggerMetadata"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="updateTrigger"  isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doUpdateTrigger"  isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="unRegisterAllRegisteredTriggersOfPool"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="handlePoolDeletedOnZK"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="createTrigger"  isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doCreateTrigger" isolation="READ_COMMITTED" propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doDeleteTriggersOfPool"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+    
+    <tx:advice id="jobServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update"  propagation="REQUIRED" rollback-for="Exception"/>
+<!--         	<tx:method name="updateJobStatus"  propagation="NOT_SUPPORTED" isolation="READ_UNCOMMITTED" rollback-for="Exception"/> -->
+<!--         	<tx:method name="updateJobStatusIfNeeded"  propagation="NOT_SUPPORTED" isolation="READ_UNCOMMITTED" rollback-for="Exception"/> -->
+        	<!-- try to add isolation="READ_COMMITTED" to fix the problem : "Deadlock found when trying to get lock; try restarting transaction;" Mysql use REPEATABLE_READ by default. change to READ_COMMITTED to avoid dead lock problem. Also try to create the index to avoid lock for full table scan. Finally found it needs to use the select *** for update to fix the dead lock of Job table. -->
+<!-- 			<tx:method name="updateJobStatus"  propagation="NEVER" rollback-for="Exception"/>        	 -->
+<!--         	<tx:method name="updateJobStatusAndCreateHistoryIfNeeded"  propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="Exception"/> -->
+<!--         	<tx:method name="updateJobStatusIfNeeded" propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="Exception"/> -->
+<!-- 			<tx:method name="updateJobStatus"  propagation="NEVER" rollback-for="Exception"/> -->
+<!-- 	        <tx:method name="runJob"  propagation="REQUIRED" rollback-for="Exception"/> -->
+<!-- Use READ_UNCOMMITTED to fix the dead lock of "index `PRIMARY` of table `kira`.`job`" problem. -->
+<!-- 			<tx:method name="updateJobStatus" propagation="NOT_SUPPORTED" rollback-for="Exception" /> -->
+<!-- 			<tx:method name="runJob"  propagation="REQUIRED" rollback-for="Exception"/> -->
+<!-- 			<tx:method name="updateJobStatus" propagation="NOT_SUPPORTED" rollback-for="Exception" /> -->
+	        <tx:method name="manuallyReRunJob"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice> 
+    
+    <tx:advice id="jobItemServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<!-- try to add isolation="READ_COMMITTED" to fix the problem : "Deadlock found when trying to get lock; try restarting transaction;" Mysql use REPEATABLE_READ by default. change to READ_COMMITTED to avoid dead lock problem. Also try to create the index to avoid lock for full table scan. Finally found it needs to use the select *** for update to fix the dead lock of Job table. -->
+<!--         	<tx:method name="updateJobItemStatus"  propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="Exception"/> -->
+        	<tx:method name="createJobItem"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="createJobItemList"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>      
+
+    <tx:advice id="jobHistoryServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="createJobHistory"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice> 
+    
+    <tx:advice id="jobItemHistoryServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="createJobItemHistory"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>     	
+    
+    <tx:advice id="jobStatusServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>  
+    
+    <tx:advice id="kiraClientMetadataServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="doUpdateKiraClientMetadata"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="createKiraClientMetadata"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doCreateKiraClientMetadata"  propagation="REQUIRED" rollback-for="Exception"/>        	
+	        <tx:method name="deletePool"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doDeletePool"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="deleteKiraClientMetadata"  propagation="REQUIRED" rollback-for="Exception"/>
+	        <tx:method name="doDeleteKiraClientMetadata"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+    
+    <tx:advice id="jobTimeoutTrackerServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="count*" propagation="SUPPORTS" read-only="true" />        
+        	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+    
+    <tx:advice id="timerTriggerScheduleServiceAdvice" transaction-manager="kiraTransactionManager">
+        <tx:attributes>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true" />    
+<!--         	<tx:method name="insert*"  propagation="REQUIRED" rollback-for="Exception"/> -->
+<!--         	<tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/> -->
+<!--         	<tx:method name="update*"  propagation="REQUIRED" rollback-for="Exception"/>                 -->
+        	<tx:method name="insert*"  propagation="REQUIRES_NEW" rollback-for="Exception"/>
+        	<tx:method name="delete*"  propagation="REQUIRES_NEW" rollback-for="Exception"/>
+        	<tx:method name="update*"  propagation="REQUIRES_NEW" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>    
+	
+    <aop:config>
+        <aop:pointcut id="triggerMetadataServicePonitCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.TriggerMetadataService.*(..))"/>
+        <aop:pointcut id="jobServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.JobService.*(..))"/>
+        <aop:pointcut id="jobItemServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.JobItemService.*(..))"/>
+        <aop:pointcut id="jobHistoryServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.JobHistoryService.*(..))"/>
+        <aop:pointcut id="jobItemHistoryServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.JobItemHistoryService.*(..))"/>
+        <aop:pointcut id="jobStatusServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.JobStatusService.*(..))"/>
+        <aop:pointcut id="kiraClientMetadataServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.KiraClientMetadataService.*(..))"/>
+        <aop:pointcut id="jobTimeoutTrackerServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.JobTimeoutTrackerService.*(..))"/>
+        <aop:pointcut id="timerTriggerScheduleServicePointCut" expression="execution(* com.yihaodian.architecture.kira.manager.service.TimerTriggerScheduleService.*(..))"/>
+        
+        <aop:advisor advice-ref="triggerMetadataServiceAdvice" pointcut-ref="triggerMetadataServicePonitCut"/> 
+        <aop:advisor advice-ref="jobServiceAdvice" pointcut-ref="jobServicePointCut"/>
+        <aop:advisor advice-ref="jobItemServiceAdvice" pointcut-ref="jobItemServicePointCut"/> 
+        <aop:advisor advice-ref="jobHistoryServiceAdvice" pointcut-ref="jobHistoryServicePointCut"/>
+        <aop:advisor advice-ref="jobItemHistoryServiceAdvice" pointcut-ref="jobItemHistoryServicePointCut"/>
+        <aop:advisor advice-ref="jobStatusServiceAdvice" pointcut-ref="jobStatusServicePointCut"/>
+        <aop:advisor advice-ref="kiraClientMetadataServiceAdvice" pointcut-ref="kiraClientMetadataServicePointCut"/>
+        <aop:advisor advice-ref="jobTimeoutTrackerServiceAdvice" pointcut-ref="jobTimeoutTrackerServicePointCut"/>
+        <aop:advisor advice-ref="timerTriggerScheduleServiceAdvice" pointcut-ref="timerTriggerScheduleServicePointCut"/>
+	</aop:config>	
+	
+	<bean id="hdcTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="jdbcDataSource" />
+		</property>
+	</bean>	
+    
+</beans>

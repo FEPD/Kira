@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QrtzFiredTriggers">
+
+	<resultMap id="qrtzFiredTriggersResult" type="QrtzFiredTriggers">
+		<result column="ENTRY_ID" property="entryId"/>
+		<result column="TRIGGER_NAME" property="triggerName"/>
+		<result column="TRIGGER_GROUP" property="triggerGroup"/>
+		<result column="IS_VOLATILE" property="isVolatile"/>
+		<result column="INSTANCE_NAME" property="instanceName"/>
+		<result column="FIRED_TIME" property="firedTime" />
+		<result column="PRIORITY" property="priority" />
+		<result column="STATE" property="state"/>
+		<result column="JOB_NAME" property="jobName"/>
+		<result column="JOB_GROUP" property="jobGroup"/>
+		<result column="IS_STATEFUL" property="isStateful"/>
+		<result column="REQUESTS_RECOVERY" property="requestsRecovery"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="QrtzFiredTriggers">
+		INSERT INTO QRTZ_FIRED_TRIGGERS
+			(ENTRY_ID, TRIGGER_NAME, TRIGGER_GROUP, IS_VOLATILE, INSTANCE_NAME, FIRED_TIME, PRIORITY, STATE, JOB_NAME, JOB_GROUP, IS_STATEFUL, REQUESTS_RECOVERY)
+		VALUES
+			(#{entryId}, #{triggerName}, #{triggerGroup}, #{isVolatile}, #{instanceName}, #{firedTime}, #{priority},
+			 #{state}, #{jobName}, #{jobGroup}, #{isStateful}, #{requestsRecovery})
+	</insert>
+
+	<update id="update" parameterType="QrtzFiredTriggers">
+		UPDATE
+			QRTZ_FIRED_TRIGGERS
+		SET
+			TRIGGER_NAME = #{triggerName},
+			TRIGGER_GROUP = #{triggerGroup},
+			IS_VOLATILE = #{isVolatile},
+			INSTANCE_NAME = #{instanceName},
+			FIRED_TIME = #{firedTime},
+			PRIORITY = #{priority},
+			STATE = #{state},
+			JOB_NAME = #{jobName},
+			JOB_GROUP = #{jobGroup},
+			IS_STATEFUL = #{isStateful},
+			REQUESTS_RECOVERY = #{requestsRecovery}
+		WHERE
+			ENTRY_ID = #{entryId}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM
+			QRTZ_FIRED_TRIGGERS
+		WHERE
+			ENTRY_ID = #{entryId}
+	</delete>
+	
+	<sql id="allColumns">
+			ENTRY_ID,
+			TRIGGER_NAME,
+			TRIGGER_GROUP,
+			IS_VOLATILE,
+			INSTANCE_NAME,
+			FIRED_TIME,
+			PRIORITY,
+			STATE,
+			JOB_NAME,
+			JOB_GROUP,
+			IS_STATEFUL,
+			REQUESTS_RECOVERY
+	</sql>		
+	
+	<select id="select" parameterType="string" resultMap="qrtzFiredTriggersResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			QRTZ_FIRED_TRIGGERS
+		WHERE
+			ENTRY_ID = #{entryId}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+		<if test="entryId != null and entryId != ''">
+			 ENTRY_ID = #{entryId}
+		</if>
+		<if test="triggerGroup != null and triggerGroup != ''">
+			AND TRIGGER_GROUP = #{triggerGroup}
+		</if>
+		<if test="triggerName != null and triggerName != ''">
+			AND TRIGGER_NAME = #{triggerName}
+		</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		order by
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+
+		<if test="orderByClause == null or orderByClause == ''">
+			ENTRY_ID ASC, TRIGGER_GROUP ASC, TRIGGER_NAME ASC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="QrtzFiredTriggersCriteria" resultMap="qrtzFiredTriggersResult">
+		SELECT
+			<include refid="allColumns" />
+		FROM
+			QRTZ_FIRED_TRIGGERS
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="QrtzFiredTriggersCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			QRTZ_FIRED_TRIGGERS
+		<include refid="criteriaWhereClause"/>
+	</select>
+
+</mapper>

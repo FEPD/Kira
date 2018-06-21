@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OperationLog">
+
+	<resultMap id="operationLogResult" type="OperationLog">
+		<result column="id" property="id"/>
+		<result column="operation_id" property="operationId"/>
+		<result column="operated_by" property="operatedBy"/>
+		<result column="operate_time" property="operateTime"/>
+		<result column="operation_details" property="operationDetails"/>
+		<result column="result_code" property="resultCode"/>
+		<result column="result_details" property="resultDetails"/>
+	</resultMap>
+	
+	<resultMap id="operationLogDetailDataResult" type="OperationLogDetailData">
+		<result column="id" property="id"/>
+		<result column="operation_id" property="operationId"/>
+		<result column="operated_by" property="operatedBy"/>
+		<result column="operate_time" property="operateTime"/>
+		<result column="operation_details" property="operationDetails"/>
+		<result column="result_code" property="resultCode"/>
+		<result column="result_details" property="resultDetails"/>		
+		
+		<result column="operation_name" property="operationName"/>
+		<result column="operation_display" property="operationDisplay"/>
+		<result column="operation_type" property="operationType"/>
+	</resultMap>	
+
+	<insert id="insert" parameterType="OperationLog">
+		INSERT INTO operation_log
+			(id, operation_id, operated_by, operate_time, operation_details, result_code, result_details)
+		VALUES
+			(#{id}, #{operationId}, #{operatedBy}, #{operateTime}, #{operationDetails}, #{resultCode}, #{resultDetails})
+	</insert>
+
+	<update id="update" parameterType="OperationLog">
+		UPDATE
+			operation_log
+		SET
+			operation_id = #{operationId},
+			operated_by = #{operatedBy},
+			operate_time = #{operateTime},
+			operation_details = #{operationDetails},
+			result_code = #{resultCode},
+			result_details = #{resultDetails}
+		WHERE
+			id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM
+			operation_log
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="select" parameterType="string" resultMap="operationLogResult">
+		SELECT
+			id,
+			operation_id,
+			operated_by,
+			operate_time,
+			operation_details,
+			result_code,
+			result_details
+		FROM
+			operation_log
+		WHERE
+			id = #{id}
+	</select>
+
+	<sql id="criteriaWhereClause">
+		<where>
+			<if test="id != null and id != ''">
+				 id = #{id}
+			</if>
+			<if test="operatedBy != null and operatedBy != ''">
+				AND operated_by = #{operatedBy}
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderByClause">
+		ORDER  BY
+		<if test="orderByClause != null and orderByClause != ''">
+			${orderByClause}
+		</if>
+		<if test="orderByClause == null">
+			operate_time		DESC
+		</if>
+	</sql>
+
+	<select id="list" parameterType="OperationLogCriteria" resultMap="operationLogResult">
+		SELECT
+			id,
+			operation_id,
+			operated_by,
+			operate_time,
+			operation_details,
+			result_code,
+			result_details			
+		FROM
+			operation_log
+		<include refid="criteriaWhereClause"/>
+		<include refid="orderByClause" />
+	</select>
+
+	<select id="count" parameterType="OperationLogCriteria" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			operation_log
+		<include refid="criteriaWhereClause"/>
+	</select>
+	
+	<sql id="listConditionalSql">
+		SELECT
+			operation_log.id,
+			operation_log.operation_id,
+			operation_log.operated_by,
+			operation_log.operate_time,
+			operation_log.operation_details,
+			operation_log.result_code,
+			operation_log.result_details,			
+			operation.name as operation_name,
+			operation.display as operation_display,
+			operation.type as operation_type
+		FROM
+			operation_log, operation	
+		WHERE operation_log.operation_id = operation.id
+		<if test="operateTimeStart != null ">
+			AND <![CDATA[
+					operation_log.operate_time >= #{operateTimeStart}
+				]]>
+		</if>
+		<if test="operateTimeEnd != null ">
+			AND <![CDATA[
+					operation_log.operate_time < #{operateTimeEnd}
+				]]>
+		</if>
+		<if test="id != null and id != ''">
+			AND operation_log.id = #{id}
+		</if>
+		<if test="operatedBy != null and operatedBy != null">
+			AND operation_log.operated_by like '%$operatedBy$%'
+		</if>
+		<if test="resultCode != null and resultCode != ''">
+			AND operation_log.result_code = #{resultCode}
+		</if>
+	    <if test="operationName != null and operationName != ''">
+			AND operation.name = #{operationName}
+		</if>
+		<if test="operationType != null and operationType != ''">
+			AND operation.type = #{operationType}
+		</if>
+		<include refid="orderByClause" />					
+	</sql>
+	
+	<select id="getOperationLogDetailDataList" parameterType="OperationLogCriteria" resultMap="operationLogDetailDataResult">
+		<include refid="listConditionalSql" />
+	</select>	
+	
+	<select id="countOperationLogDetailDataList" parameterType="OperationLogCriteria" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		(
+			<include refid="listConditionalSql" />
+		) as t
+	</select>	
+
+</mapper>

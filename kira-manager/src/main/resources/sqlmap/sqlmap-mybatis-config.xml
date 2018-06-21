@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /*
+ *  Copyright 2018 jd.com
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */-->
+
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<properties resource="conf/dataSource_kira.properties">
+	</properties>
+
+	<settings>
+		<setting name="cacheEnabled" value="true"/>
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="multipleResultSetsEnabled" value="true"/>
+		<setting name="useColumnLabel" value="true"/>
+		<setting name="useGeneratedKeys" value="false"/>
+		<setting name="autoMappingBehavior" value="PARTIAL"/>
+		<setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+		<setting name="defaultExecutorType" value="SIMPLE"/>
+		<setting name="defaultStatementTimeout" value="25"/>
+		<setting name="defaultFetchSize" value="100"/>
+		<setting name="safeRowBoundsEnabled" value="false"/>
+		<setting name="mapUnderscoreToCamelCase" value="false"/>
+		<setting name="localCacheScope" value="SESSION"/>
+		<setting name="jdbcTypeForNull" value="OTHER"/>
+		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="HdcMenu" type="com.yihaodian.architecture.kira.manager.domain.HdcMenu"/>
+		<typeAlias alias="HdcMenuCriteria" type="com.yihaodian.architecture.kira.manager.criteria.HdcMenuCriteria"/>
+
+		<typeAlias alias="HdcPvg" type="com.yihaodian.architecture.kira.manager.domain.HdcPvg"/>
+		<typeAlias alias="HdcPvgCriteria" type="com.yihaodian.architecture.kira.manager.criteria.HdcPvgCriteria"/>
+
+		<typeAlias alias="HdcRole" type="com.yihaodian.architecture.kira.manager.domain.HdcRole"/>
+		<typeAlias alias="HdcRoleCriteria" type="com.yihaodian.architecture.kira.manager.criteria.HdcRoleCriteria"/>
+
+		<typeAlias alias="HdcUser" type="com.yihaodian.architecture.kira.manager.domain.HdcUser"/>
+		<typeAlias alias="HdcUserCriteria" type="com.yihaodian.architecture.kira.manager.criteria.HdcUserCriteria"/>
+
+		<typeAlias alias="Job"
+			type="com.yihaodian.architecture.kira.manager.domain.Job" />
+		<typeAlias alias="JobDetailData"
+			type="com.yihaodian.architecture.kira.manager.domain.JobDetailData" />
+		<typeAlias alias="JobCriteria"
+			type="com.yihaodian.architecture.kira.manager.criteria.JobCriteria" />
+
+		<typeAlias alias="JobHistory"
+			type="com.yihaodian.architecture.kira.manager.domain.JobHistory" />
+		<typeAlias alias="JobHistoryDetailData"
+			type="com.yihaodian.architecture.kira.manager.domain.JobHistoryDetailData" />
+		<typeAlias alias="JobHistoryCriteria"
+			type="com.yihaodian.architecture.kira.manager.criteria.JobHistoryCriteria" />
+
+		<typeAlias alias="JobItem"
+			type="com.yihaodian.architecture.kira.manager.domain.JobItem" />
+		<typeAlias alias="JobItemDetailData"
+			type="com.yihaodian.architecture.kira.manager.domain.JobItemDetailData" />
+		<typeAlias alias="JobItemCriteria"
+			type="com.yihaodian.architecture.kira.manager.criteria.JobItemCriteria" />
+
+		<typeAlias alias="JobItemHistory"
+			type="com.yihaodian.architecture.kira.manager.domain.JobItemHistory" />
+		<typeAlias alias="JobItemHistoryDetailData"
+			type="com.yihaodian.architecture.kira.manager.domain.JobItemHistoryDetailData" />
+		<typeAlias alias="JobItemHistoryCriteria"
+			type="com.yihaodian.architecture.kira.manager.criteria.JobItemHistoryCriteria" />
+
+		<typeAlias alias="JobRunStatistics" type="com.yihaodian.architecture.kira.manager.domain.JobRunStatistics"/>
+		<typeAlias alias="JobRunStatisticsCriteria" type="com.yihaodian.architecture.kira.manager.criteria.JobRunStatisticsCriteria"/>
+
+		<typeAlias alias="JobStatus"
+			type="com.yihaodian.architecture.kira.manager.domain.JobStatus" />
+		<typeAlias alias="JobStatusCriteria"
+			type="com.yihaodian.architecture.kira.manager.criteria.JobStatusCriteria" />
+
+		<typeAlias alias="JobTimeoutTracker" type="com.yihaodian.architecture.kira.manager.domain.JobTimeoutTracker"/>
+		<typeAlias alias="JobTimeoutTrackerCriteria" type="com.yihaodian.architecture.kira.manager.criteria.JobTimeoutTrackerCriteria"/>
+
+		<typeAlias alias="KiraClientMetadata" type="com.yihaodian.architecture.kira.manager.domain.KiraClientMetadata"/>
+		<typeAlias alias="KiraClientMetadataCriteria" type="com.yihaodian.architecture.kira.manager.criteria.KiraClientMetadataCriteria"/>
+
+		<typeAlias alias="Operation" type="com.yihaodian.architecture.kira.manager.domain.Operation"/>
+		<typeAlias alias="OperationCriteria" type="com.yihaodian.architecture.kira.manager.criteria.OperationCriteria"/>
+
+		<typeAlias alias="OperationLog" type="com.yihaodian.architecture.kira.manager.domain.OperationLog"/>
+		<typeAlias alias="OperationLogDetailData" type="com.yihaodian.architecture.kira.manager.domain.OperationLogDetailData"/>
+		<typeAlias alias="OperationLogCriteria" type="com.yihaodian.architecture.kira.manager.criteria.OperationLogCriteria"/>
+
+		<typeAlias alias="QrtzFiredTriggers" type="com.yihaodian.architecture.kira.manager.domain.QrtzFiredTriggers"/>
+		<typeAlias alias="QrtzFiredTriggersCriteria" type="com.yihaodian.architecture.kira.manager.criteria.QrtzFiredTriggersCriteria"/>
+
+		<typeAlias alias="QrtzSimpleTriggers" type="com.yihaodian.architecture.kira.manager.domain.QrtzSimpleTriggers"/>
+		<typeAlias alias="QrtzSimpleTriggersCriteria" type="com.yihaodian.architecture.kira.manager.criteria.QrtzSimpleTriggersCriteria"/>
+
+		<typeAlias alias="QrtzTriggers" type="com.yihaodian.architecture.kira.manager.domain.QrtzTriggers"/>
+		<typeAlias alias="QrtzTriggersCriteria" type="com.yihaodian.architecture.kira.manager.criteria.QrtzTriggersCriteria"/>
+
+		<typeAlias alias="TimerTriggerSchedule" type="com.yihaodian.architecture.kira.manager.domain.TimerTriggerSchedule"/>
+		<typeAlias alias="TimerTriggerScheduleCriteria" type="com.yihaodian.architecture.kira.manager.criteria.TimerTriggerScheduleCriteria"/>
+		<typeAlias alias="TriggerIdentity" type="com.yihaodian.architecture.kira.common.TriggerIdentity" />
+
+		<typeAlias alias="TriggerMetadata"
+			type="com.yihaodian.architecture.kira.manager.domain.TriggerMetadata" />
+		<typeAlias alias="TriggerIdentity"
+			type="com.yihaodian.architecture.kira.common.TriggerIdentity" />
+		<typeAlias alias="TriggerMetadataCriteria"
+			type="com.yihaodian.architecture.kira.manager.criteria.TriggerMetadataCriteria" />
+
+		<typeAlias alias="UpgradeRoadmap" type="com.yihaodian.architecture.kira.manager.domain.UpgradeRoadmap"/>
+		<typeAlias alias="UpgradeRoadmapCriteria" type="com.yihaodian.architecture.kira.manager.criteria.UpgradeRoadmapCriteria"/>
+
+
+	</typeAliases>
+
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driverClassName}"/>
+				<property name="url" value="${jdbc.url}"/>
+				<property name="username" value="${jdbc.username}"/>
+				<property name="password" value="${jdbc.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="sqlmap/hdc/HdcMenu.xml"/>
+		<mapper resource="sqlmap/hdc/HdcPvg.xml"/>
+		<mapper resource="sqlmap/hdc/HdcRole.xml"/>
+		<mapper resource="sqlmap/hdc/HdcUser.xml"/>
+
+		<mapper resource="sqlmap/kira/Job.xml"/>
+		<mapper resource="sqlmap/kira/JobHistory.xml"/>
+		<mapper resource="sqlmap/kira/JobItem.xml"/>
+		<mapper resource="sqlmap/kira/JobItemHistory.xml"/>
+		<mapper resource="sqlmap/kira/JobStatus.xml"/>
+		<mapper resource="sqlmap/kira/TriggerMetadata.xml"/>
+		<mapper resource="sqlmap/kira/Operation.xml"/>
+		<mapper resource="sqlmap/kira/OperationLog.xml"/>
+		<mapper resource="sqlmap/kira/KiraClientMetadata.xml"/>
+		<mapper resource="sqlmap/kira/JobTimeoutTracker.xml"/>
+		<mapper resource="sqlmap/kira/TimerTriggerSchedule.xml"/>
+		<mapper resource="sqlmap/kira/QrtzFiredTriggers.xml"/>
+		<mapper resource="sqlmap/kira/QrtzSimpleTriggers.xml"/>
+		<mapper resource="sqlmap/kira/QrtzTriggers.xml"/>
+		<mapper resource="sqlmap/kira/UpgradeRoadmap.xml"/>
+		<mapper resource="sqlmap/kira/JobRunStatistics.xml"/>
+	</mappers>
+
+</configuration>

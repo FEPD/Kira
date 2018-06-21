@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+
+<settings xmlns="http://maven.apache.org/settings/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd
+http://maven.apache.org/settings/1.0.0 ">
+
+    <localRepository>xxx/Repository</localRepository>
+    <!-- pluginGroups | This is a list of additional group identifiers that
+        will be searched when resolving plugins by their prefix, i.e. | when invoking
+        a command line like "mvn prefix:goal". Maven will automatically add the group
+        identifiers | "org.apache.maven.plugins" and "org.codehaus.mojo" if these
+        are not already contained in the list. | -->
+    <pluginGroups>
+        <!-- pluginGroup | Specifies a further group identifier to use for plugin
+            lookup. <pluginGroup>com.your.plugins</pluginGroup> -->
+    </pluginGroups>
+
+    <!-- proxies | This is a list of proxies which can be used on this machine
+        to connect to the network. | Unless otherwise specified (by system property
+        or command-line switch), the first proxy | specification in this list marked
+        as active will be used. | -->
+    <proxies>
+
+    </proxies>
+
+    <!-- servers | This is a list of authentication profiles, keyed by the server-id
+        used within the system. | Authentication profiles can be used whenever maven
+        must make a connection to a remote server. | -->
+    <servers>
+
+
+    </servers>
+
+    <!-- mirrors | This is a list of mirrors to be used in downloading artifacts
+        from remote repositories. | | It works like this: a POM may declare a repository
+        to use in resolving certain artifacts. | However, this repository may have
+        problems with heavy traffic at times, so people have mirrored | it to several
+        places. | | That repository definition will have a unique id, so we can create
+        a mirror reference for that | repository, to be used as an alternate download
+        site. The mirror site will be the preferred | server for that repository.
+        | -->
+    <mirrors>
+
+        <mirror>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <mirrorOf>central</mirrorOf>
+        </mirror>
+        <mirror>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <url>http://repo1.maven.org/maven2/</url>
+            <mirrorOf>central</mirrorOf>
+        </mirror>
+        <mirror>
+            <id>repo2</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Human Readable Name for this Mirror.</name>
+            <url>http://repo2.maven.org/maven2/</url>
+        </mirror>
+        <mirror>
+            <id>ibiblio</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Human Readable Name for this Mirror.</name>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+        </mirror>
+        <mirror>
+            <id>jboss-public-repository-group</id>
+            <mirrorOf>central</mirrorOf>
+            <name>JBoss Public Repository Group</name>
+            <url>http://repository.jboss.org/nexus/content/groups/public</url>
+        </mirror>
+        <!-- 中央仓库在中国的镜像 -->
+        <mirror>
+            <id>maven.net.cn</id>
+            <name>oneof the central mirrors in china</name>
+            <url>http://maven.net.cn/content/groups/public/</url>
+            <mirrorOf>central</mirrorOf>
+        </mirror>
+    </mirrors>
+
+
+    <profiles>
+        <profile>
+            <id>myProfie</id>
+            <repositories>
+                <repository>
+                    <id>alimaven</id>
+                    <name>aliyun maven</name>
+                    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>alimaven</id>
+                    <name>aliyun maven</name>
+                    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+
+    </profiles>
+    <activeProfiles>
+        <activeProfile>myProfie</activeProfile>
+    </activeProfiles>
+
+</settings>

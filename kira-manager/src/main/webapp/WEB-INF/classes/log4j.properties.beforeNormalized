@@ -1,0 +1,26 @@
+### set log levels ###
+log4j.rootLogger = DEBUG , stdout ,	rollingFile
+
+### output to console ###
+log4j.appender.stdout = org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Threshold=WARN
+log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=[kira-manager] [%t] %-5p %-23d{yyyy-MM-dd HH:mm:ss,S} %m | %c.%M(%L)%n
+
+log4j.appender.rollingFile=org.apache.log4j.RollingFileAppender
+log4j.appender.rollingFile.Threshold=DEBUG
+log4j.appender.rollingFile.File=${catalina.base}/logs/kira-manager.log
+#log4j.appender.rollingFile.File=../logs/kira-manager.log
+#log4j.appender.rollingFile.File=${kira.web.root}/logs/kira-manager.log
+log4j.appender.rollingFile.Append=true
+log4j.appender.rollingFile.MaxFileSize=10MB
+log4j.appender.rollingFile.MaxBackupIndex=100
+log4j.appender.rollingFile.layout=org.apache.log4j.PatternLayout
+log4j.appender.rollingFile.layout.ConversionPattern=[kira-manager] [%t] %-5p %-23d{yyyy-MM-dd HH:mm:ss,S} %m | %c.%M(%L)%n
+
+# Control logging for other open source packages
+# log4j.logger.com.yihaodian.cal=INFO
+#log4j.logger.com.ibatis=DEBUG
+#log4j.logger.java.sql.Connection=DEBUG
+#log4j.logger.java.sql.Statement=DEBUG
+#log4j.logger.java.sql.PreparedStatement=DEBUG,stdout
