@@ -1,6 +1,6 @@
 # Kira Config Demo
 
-###一、Schedule Config
+### 一、Schedule Config
 #### 1.zookeeper-cluster.properties 
 
 ```
@@ -167,7 +167,7 @@ class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailF
 </beans>
 ```
 
-###二、Download demo config 
+### 二、Download demo config 
 * [Download](kira-manager/src/main/resources/files/kira_config_demo.zip)
 
 ### 三、Config dependency 
