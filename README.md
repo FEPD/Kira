@@ -7,7 +7,7 @@
 
 ### Architecture
 
-![Kira_architecture](kira-manager/src/main/resources/files/Kira_architecture.jpg)
+![Kira_architecture](https://github.com/FEPD/Kira/tree/1.0-version/kira-manager/src/main/resources/files/Kira_architecture.jpg)
 
 
 * Kira include components：
