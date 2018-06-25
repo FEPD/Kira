@@ -24,6 +24,7 @@ import com.yihaodian.architecture.kira.client.util.JobCancelResult;
 import com.yihaodian.architecture.kira.common.HandleResult;
 import com.yihaodian.architecture.kira.common.JobCancelContextData;
 import com.yihaodian.architecture.kira.common.JobItemRunContextData;
+import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
 import com.yihaodian.architecture.kira.common.TriggerIdentity;
 import com.yihaodian.architecture.kira.common.dto.JobCancelRequest;
@@ -33,10 +34,10 @@ import com.yihaodian.architecture.kira.common.iface.IJobHandler;
 import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.quartz.JobDetail;
+import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.quartz.JobDetailAwareTrigger;
 import org.springframework.util.MethodInvoker;
 
 public class KiraClientJobHandler implements IJobHandler {
@@ -147,8 +148,9 @@ public class KiraClientJobHandler implements IJobHandler {
         if (null != applicationContext) {
           Object triggerBeanObject = applicationContext.getBean(triggerId);
           if (null != triggerBeanObject) {
-            if (triggerBeanObject instanceof JobDetailAwareTrigger) {
-              JobDetail jobDetail = ((JobDetailAwareTrigger) triggerBeanObject).getJobDetail();
+            if (triggerBeanObject instanceof Trigger) {
+              JobDetail jobDetail = (JobDetail)((Trigger) triggerBeanObject).getJobDataMap().get(
+                  KiraCommonConstants.JOB_DETAIL_KEY);
               if (null != jobDetail) {
                 Object methodInvokerObj = jobDetail.getJobDataMap()
                     .get(KiraClientConstants.JOBDATAMAP_KEY_METHODINVOKER);

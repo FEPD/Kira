@@ -100,12 +100,12 @@
 
 	<sql id="criteriaWhereClause">
 		<where>
-		<if test="id != null and id != ''" >
-		 id = #{id}
-		</if>
-		<if test="jobId != null and jobId != ''" >
-			AND job_id = #{jobId}
-		</if>
+			<if test="id != null and id != ''" >
+				 id = #{id}
+			</if>
+			<if test="jobId != null and jobId != ''" >
+				AND job_id = #{jobId}
+			</if>
 		</where>
 	</sql>
 

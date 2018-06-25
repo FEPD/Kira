@@ -19,9 +19,6 @@ import com.yihaodian.architecture.kira.common.akka.entrypoint.WorkerActor;
 import com.yihaodian.architecture.kira.common.dto.JobItemStatusReport;
 import java.util.Date;
 
-/**
- * Created by zhoufeiqiang on 14/09/2017.
- */
 public class JobStatusWorkerActor extends WorkerActor {
 
   @Override

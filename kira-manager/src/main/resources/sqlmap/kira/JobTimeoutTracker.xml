@@ -91,26 +91,26 @@
 
 	<sql id="criteriaWhereClause">
 		<where>
-		<if test="id != null and id != ''">
-		 	id = #{id}
-		</if>
-		<if test="jobId != null and jobId != ''">
-			AND job_id = #{jobId}
-		</if>
-		<if test="state != null and state != ''">
-			AND state = #{state}
-		</if>
-		<if test="stateList != null and stateList.size > 0 ">
-			AND	state in
-			<foreach collection = "stateList" index="index" item ="stateList" open = "(" close = ")" separator = ",">
-				#{stateList}
-			</foreach>
-		</if>
-		<if test="checkTime != null">
-			AND <![CDATA[
-					expect_timeout_time < #{checkTime}
-				]]>
-		</if>
+			<if test="id != null and id != ''">
+				id = #{id}
+			</if>
+			<if test="jobId != null and jobId != ''">
+				AND job_id = #{jobId}
+			</if>
+			<if test="state != null and state != ''">
+				AND state = #{state}
+			</if>
+			<if test="stateList != null and stateList.size > 0 ">
+				AND	state in
+				<foreach collection = "stateList" index="index" item ="stateList" open = "(" close = ")" separator = ",">
+					#{stateList}
+				</foreach>
+			</if>
+			<if test="checkTime != null">
+				AND <![CDATA[
+						expect_timeout_time < #{checkTime}
+					]]>
+			</if>
 		</where>
 	</sql>
 
@@ -189,22 +189,22 @@
 		  update job_timeout_tracker set state=#{state},last_update_state_time=#{lastUpdateStateTime},
 		last_update_state_details=#{lastUpdateStateDetails},handle_timeout_failed_count=#{handleTimeoutFailedCount},data_version=data_version+1
 		<where>
-		<if test="id != null and id != ''">
-			  id = #{id}
-		</if>
-		<if test="jobId != null and jobId != ''">
-			AND job_id = #{jobId}
-		</if>
-		<if test="stateList != null and stateList.size > 0 ">
-			AND state in
-			<foreach collection = "stateList" index="index" item ="stateList" open = "(" close = ")"  separator = ",">
-				#{stateList}
-			</foreach>
-		</if>
+			<if test="id != null and id != ''">
+					id = #{id}
+			</if>
+			<if test="jobId != null and jobId != ''">
+				AND job_id = #{jobId}
+			</if>
+			<if test="stateList != null and stateList.size > 0 ">
+				AND state in
+				<foreach collection = "stateList" index="index" item ="stateList" open = "(" close = ")"  separator = ",">
+					#{stateList}
+				</foreach>
+			</if>
 
-		<if test="dataVersion != null and dataVersion != ''">
-			AND  dataVersion = #{dataVersion}
-		</if>
+			<if test="dataVersion != null and dataVersion != ''">
+				AND  dataVersion = #{dataVersion}
+			</if>
 		</where>
 	</update>		
 

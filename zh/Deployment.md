@@ -16,7 +16,7 @@
 
 ### 克隆 & 编译
 
-    > git clone https://github.com/FEPD/Kira.git
+    > git clone -b 2.0-version https://github.com/FEPD/Kira
     > cd kira
     > mvn -Prelease-all -DskipTests clean install -U
 

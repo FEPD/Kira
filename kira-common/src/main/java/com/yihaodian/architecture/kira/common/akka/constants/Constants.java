@@ -14,7 +14,6 @@
  */
 package com.yihaodian.architecture.kira.common.akka.constants;
 
-
 public interface Constants {
 
   public static final String VALUE_NULL = "NULL";

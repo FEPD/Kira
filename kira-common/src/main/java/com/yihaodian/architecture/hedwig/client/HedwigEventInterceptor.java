@@ -43,7 +43,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.remoting.support.RemotingSupport;
 
-//import com.yihaodian.monitor.util.MonitorJmsSendUtil;
 
 /**
  * @author Archer

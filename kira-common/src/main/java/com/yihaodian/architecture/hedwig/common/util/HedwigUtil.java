@@ -41,7 +41,7 @@ public class HedwigUtil {
         } else {
           return v;
         }
-      } else if (AopUtils.isCglibProxyClass(object.getClass())) {
+      } else if (AopUtils.isCglibProxy(object)) {
         return AopUtils.getTargetClass(object).getSimpleName();
       } else {
         return object.getClass().getSimpleName();

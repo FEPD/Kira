@@ -10,7 +10,7 @@
  <dependency>
  <groupId>com.yihaodian.architecture</groupId>
      <artifactId>kira-client</artifactId>
-     <version>1.0.0-SNAPSHOT</version>
+     <version>2.0.0-SNAPSHOT</version>
  </dependency>
  ``` 
  
@@ -21,11 +21,11 @@
  <dependency>
          <groupId>org.springframework</groupId>         
          <artifactId>spring-webmvc</artifactId>       
-         <version>2.5.6.SEC03</version>
+         <version>4.3.10.RELEASE</version>
  </dependency>
  ```
  
- * **Note:** If you are using spring version 3.2.0, please add the dependency on spring-context-support, otherwise you will be prompted to find some classes.
+ * **Note:** If you are using spring version 3.2.x, please add the dependency on spring-context-support, otherwise you will be prompted to find some classes.
  
  #### 3.Quartz version
  * The kira-client already contains the dependency on the quartz package, so the client can not add the following quartz dependency again. The platform recommends that the client use the following version of quartz. If other versions of quartz are used, it is recommended to use the recommended configuration of the platform
@@ -34,7 +34,7 @@
  <dependency>
       <groupId>org.quartz-scheduler</groupId>
            <artifactId>quartz</artifactId>
-           <version>1.8.6</version>
+           <version>2.2.2</version>
  </dependency>
  ```
  
@@ -136,17 +136,17 @@
  *  Now that we have entered the core timig job configuration, Kira has added some attributes as far as possible to support the original quartz various configuration attributes.
  
  
- ####1. Quartz extended
+ #### 1. Quartz extended
  * Replace the original quartz class with the associated extended custom class
      * Replace **org.springframework.scheduling.quartz.SchedulerFactoryBean** with **com.yihaodian.architecture.kira.client.quartz.YHDSchedulerFactoryBean**
      * Replace **org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean** with **com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailFactoryBean**
      * Replace **org.springframework.scheduling.quartz.SimpleTriggerBean** with **com.yihaodian.architecture.kira.client.quartz.YHDSimpleTriggerBean**
      * Replace **org.springframework.scheduling.quartz.CronTriggerBean** with **com.yihaodian.architecture.kira.client.quartz.YHDCronTriggerBean**
   
- ####2.Trigger Type
+ #### 2.Trigger Type
  * Make sure that the configured YHDSimpleTriggerBean and YHDSimpleTriggerBean specify the unique bean id/name within this App application. Currently only SimpleTrigger and CronTriggerBean types are supported.
  
- ####3.YHDSimpleTriggerBean concrete attribute configuration
+ #### 3.YHDSimpleTriggerBean concrete attribute configuration
  * The configurable properties are described below (for more detailed description of some quartz properties, please refer to the specific instructions of quartz)
  
  | Attributes |	Type	|Optional/Required  | Comment |Whether Quartz has properties|
@@ -191,12 +191,12 @@
     <property name="onlyRunOnSingleProcess" value="true" />
     <property name="scheduledLocally" value="false" />
     <property name="disabled" value="false" />
-    <property name="locationsToRunJob" value="ip:8080,ip:80" />
+    <property name="locationsToRunJob" value="192.168.35.100:8080,192.168.35.200:80" />
  <!-- <property name="locationsToRunJob" value="empty" /> -->
  </bean>
  ```
  
- ####4.YHDCronTriggerBean concrete attribute configuration
+ #### 4.YHDCronTriggerBean concrete attribute configuration
  
  * The configurable properties are described below (for more detailed description of some quartz properties, please refer to the specific instructions of quartz)
  
@@ -240,7 +240,7 @@
  ```
  
  
- ####5.JobDetail Config
+ #### 5.JobDetail Config
  
  
  * The method configuration example without parameters is as follows：
@@ -294,7 +294,7 @@
  ```
  
  
- ####6.Scheudler Config
+ #### 6.Scheudler Config
  
  * In order to support the application of the local application can be task scheduling, you still need to define the Scheduler, its definition is similar to the original, just replace the type.
  
@@ -322,7 +322,7 @@
  </bean>
  ```
   
- ####7.Kira Client Config(Optional）
+ #### 7.Kira Client Config(Optional）
  
  * A spring bean of type KiraClientConfig can be defined for configuring the Kira client. If you define a client configuration, such as the configuration of the spring bean id is kiraClientConfig, then be sure to set depends-on = "kiraClientConfig" in the scheduler spring definition to ensure the correct initialization order (important). Also make sure that the same app application uses the same client configuration.
  Client configurable items are as follows:
@@ -352,7 +352,7 @@
     <property name="sendAlarmEmail" value="true" />
     <property name="emailsToReceiveAlarm" value="aaa@jd.com,bbb@jd.com" />
     <property name="sendAlarmSMS" value="true" />
-    <property name="phoneNumbersToReceiveAlarmSMS" value="xxxxxx,13888888888" />
+    <property name="phoneNumbersToReceiveAlarmSMS" value="13812345678,13888888888" />
  </bean>
  ```
  

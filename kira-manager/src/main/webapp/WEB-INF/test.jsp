@@ -44,7 +44,7 @@
 	<a href="other/getAdminUserNames.action">getAdminUserNames(other/getAdminUserNames.action)</a>
 	<p />
 	<br />
-	<a href="other/setAdminUserNames.action?criteria.adminUserNames=xxx,xxx">setAdminUserNames(other/setAdminUserNames.action?criteria.adminUserNames=xxx,xxx)</a>
+	<a href="other/setAdminUserNames.action?criteria.adminUserNames=xxx">setAdminUserNames(other/setAdminUserNames.action?criteria.adminUserNames=xxx)</a>
 	<p />
 	<br />
 	<a href="other/getPoolValueNeedRectifiedPoolsUnderTriggers.action">getPoolValueNeedRectifiedPoolsUnderTriggers(other/getPoolValueNeedRectifiedPoolsUnderTriggers.action)</a>	
@@ -92,7 +92,7 @@
 	<a href="other/getPrivatePhoneNumbers.action">getPrivatePhoneNumbers(other/getPrivatePhoneNumbers.action)</a>
 	<p />
 	<br />	
-	<a href="other/setPrivatePhoneNumbers.action?criteria.privatePhoneNumbers=13816173670">setPrivatePhoneNumbers(other/setPrivatePhoneNumbers.action?criteria.privatePhoneNumbers=13816173670)</a>
+	<a href="other/setPrivatePhoneNumbers.action?criteria.privatePhoneNumbers=xxx">setPrivatePhoneNumbers(other/setPrivatePhoneNumbers.action?criteria.privatePhoneNumbers=xxx)</a>
 	<p />
 	<br />				
 	<a href="other/getAdminEmails.action">getAdminEmails(other/getAdminEmails.action)</a>
@@ -158,13 +158,13 @@
 	<a href="kiraClientMetadata/getKiraClientMetadataById.action?criteria.id=1">根据Id获取Kira客户端配置信息(kiraClientMetadata/getKiraClientMetadataById.action?criteria.id=1)</a>
 	<p />	
 	<br />	
-	<a href="kiraClientMetadata/updateKiraClientMetadata.action?kiraClientMetadata.id=1&kiraClientMetadata.visibilityLimited=true&kiraClientMetadata.visibleForUsers=testName1,testName2&kiraClientMetadata.sendAlarmEmail=true&kiraClientMetadata.emailsToReceiveAlarm=xxx&kiraClientMetadata.sendAlarmSMS=true&kiraClientMetadata.phoneNumbersToReceiveAlarmSMS=xxx,xxx">更新Kira客户端配置信息(kiraClientMetadata/updateKiraClientMetadata.action?kiraClientMetadata.id=1&kiraClientMetadata.visibilityLimited=true&kiraClientMetadata.visibleForUsers=testName1,testName2&kiraClientMetadata.sendAlarmEmail=true&kiraClientMetadata.emailsToReceiveAlarm=xxx&kiraClientMetadata.sendAlarmSMS=true&kiraClientMetadata.phoneNumbersToReceiveAlarmSMS=xxx,xxx)</a>
+	<a href="kiraClientMetadata/updateKiraClientMetadata.action?kiraClientMetadata.id=1&kiraClientMetadata.visibilityLimited=true&kiraClientMetadata.visibleForUsers=testName1,testName2&kiraClientMetadata.sendAlarmEmail=true&kiraClientMetadata.emailsToReceiveAlarm=xxx&kiraClientMetadata.sendAlarmSMS=true&kiraClientMetadata.phoneNumbersToReceiveAlarmSMS=XXX">更新Kira客户端配置信息(kiraClientMetadata/updateKiraClientMetadata.action?kiraClientMetadata.id=1&kiraClientMetadata.visibilityLimited=true&kiraClientMetadata.visibleForUsers=testName1,testName2&kiraClientMetadata.sendAlarmEmail=true&kiraClientMetadata.emailsToReceiveAlarm=xxx&kiraClientMetadata.sendAlarmSMS=true&kiraClientMetadata.phoneNumbersToReceiveAlarmSMS=xxx,xxx)</a>
 	<p />	
 	<br />		
 	<a href="kiraClientMetadata/createKiraClientMetadata.action?newKiraClientMetadata.poolId=myNewPoolId&newKiraClientMetadata.manuallyCreatedDetail=createPoolTest">创建Kira客户端配置信息(kiraClientMetadata/createKiraClientMetadata.action?newKiraClientMetadata.poolId=myNewPoolId&newKiraClientMetadata.manuallyCreatedDetail=createPoolTest)</a>																																							
 	<p />	
 	<br />
-	<a href="kiraClientMetadata/deleteKiraClientMetadata.action?criteria.poolId=yihaodian/kira">删除非手动创建的Kira客户端配置信息(会连带删除其下所有的定时任务)(kiraClientMetadata/deleteKiraClientMetadata.action?criteria.poolId=yihaodian/kira)</a>																																							
+	<a href="kiraClientMetadata/deleteKiraClientMetadata.action?criteria.poolId=kira">删除非手动创建的Kira客户端配置信息(会连带删除其下所有的定时任务)(kiraClientMetadata/deleteKiraClientMetadata.action?criteria.poolId=kira)</a>
 	<p />	
 	<br />
 	<a href="kiraClientMetadata/deleteKiraClientMetadata.action?criteria.poolId=myCreatedPoolId">删除手动创建的Kira客户端配置信息(会连带删除其下所有的定时任务)(kiraClientMetadata/deleteKiraClientMetadata.action?criteria.poolId=myCreatedPoolId)</a>																																							

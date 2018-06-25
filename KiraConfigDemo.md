@@ -142,7 +142,7 @@ class="com.yihaodian.architecture.kira.client.quartz.YHDMethodInvokingJobDetailF
 		<property name="waitForResourceTimeoutMillisecond" value="120000" />
 		<property name="autoDeleteTriggersOnZK" value="true" />		
 		<property name="visibilityLimited" value="false" />
-		<property name="visibleForUsers" value="xxx />
+		<property name="visibleForUsers" value="xxxx" />
 		<property name="sendAlarmEmail" value="true" />
 		<property name="emailsToReceiveAlarm" value="xxx@aaa.com" />
 		<property name="sendAlarmSMS" value="true" />

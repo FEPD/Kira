@@ -144,16 +144,16 @@ public class TimerTriggerScheduleDaoImpl implements TimerTriggerScheduleDao {
     Map<String, Object> param = new HashMap<String, Object>(1);
     param.put("assignedServerIdList", assignedServerIdList);
 
-    Map<String, Map<String, String>> _value = sqlSession
+    Map<String, Map<String, String>> value = sqlSession
         .selectMap("TimerTriggerSchedule.getAssignedServerIdAssignedCountMap",
             param, "assignedServerId");
 
-    if (_value != null) {
-      for (Map map : _value.values()) {
+    if (value != null) {
+      for (Map map : value.values()) {
         Integer count = (Integer) map.get("assignedCount");
         if(count != null) {
-         returnValue.put("assignedCount", count);
-       }
+          returnValue.put("assignedCount", count);
+        }
       }
     }
 

@@ -51,6 +51,8 @@ public class LoginProcess extends BaseServlet {
         data.put("success", true);
         data.put("msg", "登录成功!");
       } else {
+        data.put("success", false);
+        data.put("msg", "用户名或者密码错误!");
         //LDAP 登录验证
 				/*
 				LDAP ldap = new LDAP();

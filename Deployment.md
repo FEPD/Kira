@@ -15,7 +15,7 @@ on your local machine to scheduling job.
 
 ### Clone AND Build 
 
-    > git clone -b 1.0-version https://github.com/FEPD/Kira/tree/1.0-version
+    > git clone -b 2.0-version https://github.com/FEPD/Kira
     > cd kira
     > mvn -Prelease-all -DskipTests clean install -U
 

@@ -18,9 +18,6 @@ import com.yihaodian.architecture.kira.manager.alarm.AlarmCenter;
 import com.yihaodian.architecture.kira.manager.service.JobItemService;
 import com.yihaodian.architecture.kira.manager.service.KiraClientMetadataService;
 
-/**
- * Created by zhoufeiqiang on 14/09/2017.
- */
 public class BaseActor {
 
   public static KiraClientMetadataService kiraClientMetadataService;

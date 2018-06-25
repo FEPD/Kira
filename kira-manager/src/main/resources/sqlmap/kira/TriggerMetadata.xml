@@ -389,13 +389,15 @@
 	</select>				
 	
 	<update id="updateUnRegisteredStatusForTriggers" parameterType="map">
-		  update trigger_metadata set unregistered=#{unRegistered} , unregistered_update_time=#{unregisteredUpdateTime} WHERE
+		  update trigger_metadata set unregistered=#{unRegistered} , unregistered_update_time=#{unregisteredUpdateTime}
+		  <where>
 		  <if test="triggerIdentityList != null and triggerIdentityList.size > 0 ">
 			   (app_id,trigger_id,version) in
 			  <foreach index="index" collection = "triggerIdentityList" item="triggerIdentityList" open = "(" close = ")" separator = ",">
 				  (#{triggerIdentityList.appId} , #{triggerIdentityList.triggerId}, #{triggerIdentityList.version})
 			  </foreach>
 		  </if>
+			</where>
 	</update>	
 	
 	<update id="updateDeletedStatusForTriggers" parameterType="map">

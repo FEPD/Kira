@@ -15,11 +15,19 @@
 package com.yihaodian.architecture.kira.client.quartz;
 
 import com.yihaodian.architecture.kira.client.internal.iface.IYHDCronTriggerBean;
+import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
-import org.springframework.scheduling.quartz.CronTriggerBean;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.impl.triggers.CronTriggerImpl;
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
 
-public class YHDCronTriggerBean extends CronTriggerBean implements IYHDCronTriggerBean {
+public class YHDCronTriggerBean extends CronTriggerImpl implements IYHDCronTriggerBean,
+    InitializingBean, BeanNameAware {
 
   private static final long serialVersionUID = 4576700838128915902L;
 
@@ -57,8 +65,14 @@ public class YHDCronTriggerBean extends CronTriggerBean implements IYHDCronTrigg
   private transient CountDownLatch endTimeSpringPropertyInjectionSignal = new CountDownLatch(1);
 
   private String jobType;
-
   private String runShellPath;
+
+  private String name;
+  private String group;
+  private JobDetail jobDetail;
+  private JobDataMap jobDataMap = new JobDataMap();
+  private TimeZone timeZone;
+  private String calendarName;
 
   public YHDCronTriggerBean() {
   }
@@ -291,7 +305,6 @@ public class YHDCronTriggerBean extends CronTriggerBean implements IYHDCronTrigg
   @Override
   public void setBeanName(String beanName) {
     this.beanName = beanName;
-    super.setBeanName(beanName);
   }
 
   @Override
@@ -331,7 +344,22 @@ public class YHDCronTriggerBean extends CronTriggerBean implements IYHDCronTrigg
     if (endTimeSpringPropertyInjectionSignal.getCount() > 0) {
       endTimeSpringPropertyInjectionSignal.countDown();
     }
-    super.afterPropertiesSet();
+
+    if (name == null) {
+      super.setName(beanName);
+    }
+
+    if (this.group == null) {
+      this.group = Scheduler.DEFAULT_GROUP;
+    }
+    super.setGroup(this.group);
+
+    if (this.jobDetail != null) {
+      this.jobDataMap.put(KiraCommonConstants.JOB_DETAIL_KEY, this.jobDetail);
+      super.setJobDataMap(this.jobDataMap);
+      super.setJobKey(this.jobDetail.getKey());
+    }
+
   }
 
   @Override
@@ -351,4 +379,27 @@ public class YHDCronTriggerBean extends CronTriggerBean implements IYHDCronTrigg
   public void setRunShellPath(String runShellPath) {
     this.runShellPath = runShellPath;
   }
+
+  public void setJobDetail(JobDetail jobDetail) {
+    this.jobDetail = jobDetail;
+  }
+
+  public void setJobDataMap(JobDataMap jobDataMap) {
+    this.jobDataMap = jobDataMap;
+    super.setJobDataMap(jobDataMap);
+  }
+
+  public void setTimeZone(TimeZone timeZone) {
+    this.timeZone = timeZone;
+    if (this.timeZone == null) {
+      this.timeZone = TimeZone.getDefault();
+    }
+    super.setTimeZone(this.timeZone);
+  }
+
+  public void setCalendarName(String calendarName) {
+    this.calendarName = calendarName;
+    super.setCalendarName(this.calendarName);
+  }
+
 }

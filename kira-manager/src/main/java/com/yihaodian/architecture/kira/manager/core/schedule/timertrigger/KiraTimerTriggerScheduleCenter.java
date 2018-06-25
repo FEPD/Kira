@@ -1156,7 +1156,13 @@ public class KiraTimerTriggerScheduleCenter extends KiraServerEventHandleCompone
           .getAssignedServerIdAssignedCountMap(assignedKiraServerIdList);
 
       for (String assignedServerId : assignedKiraServerIdList) {
-        Integer count = assignedServerIdAssignedCountMapInDB.get(assignedServerId);
+        Integer count = 0;
+        Object object = assignedServerIdAssignedCountMapInDB.get(assignedServerId);
+        if (object instanceof Integer) {
+          count = (Integer) object;
+        }else if (object instanceof HashMap){
+          count = (Integer) ((HashMap)object).get("assignedCount");
+        }
         if (null == count) {
           returnValue.put(assignedServerId, Integer.valueOf(0));
         } else {

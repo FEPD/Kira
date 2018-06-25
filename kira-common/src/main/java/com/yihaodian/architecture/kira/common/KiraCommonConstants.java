@@ -91,4 +91,6 @@ public interface KiraCommonConstants {
   public static final long JOB_DISPATCH_TIMEOUT_LOW_LIMIT = 2 * 60 * 1000;
 
   public static final String KIRA_AGENT_WEBAPPS_DIR = "kira.agent.webapps.dir";
+
+  public static final String JOB_DETAIL_KEY = "jobDetail";
 }

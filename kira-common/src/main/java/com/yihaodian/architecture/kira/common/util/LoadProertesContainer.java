@@ -22,9 +22,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by zhoufeiqiang on 04/09/2017.
- */
 public class LoadProertesContainer {
 
   private static Properties InternalProperties = new Properties();

@@ -15,12 +15,19 @@
 package com.yihaodian.architecture.kira.client.quartz;
 
 import com.yihaodian.architecture.kira.client.internal.iface.IYHDSimpleTriggerBean;
+import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
-import org.springframework.scheduling.quartz.SimpleTriggerBean;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
 
-public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpleTriggerBean {
+public class YHDSimpleTriggerBean extends SimpleTriggerImpl implements IYHDSimpleTriggerBean,
+    InitializingBean, BeanNameAware {
 
   private static final long serialVersionUID = -3131443609868838922L;
 
@@ -61,8 +68,12 @@ public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpl
   private transient CountDownLatch endTimeSpringPropertyInjectionSignal = new CountDownLatch(1);
 
   private String jobType;
-
   private String runShellPath;
+
+  private String name;
+  private String group;
+  private JobDetail jobDetail;
+  private JobDataMap jobDataMap = new JobDataMap();
 
   public YHDSimpleTriggerBean() {
   }
@@ -222,6 +233,9 @@ public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpl
 
   @Override
   public void setStartTime(Date startTime) {
+    if (getStartTime() == null || this.startDelaySet > 0) {
+      setStartTime(new Date(System.currentTimeMillis() + this.startDelaySet));
+    }
     super.setStartTime(startTime);
     if (startTimeSpringPropertyInjectionSignal.getCount() > 0) {
       startTimeSpringPropertyInjectionSignal.countDown();
@@ -248,9 +262,7 @@ public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpl
     }
   }
 
-  @Override
   public void setStartDelay(long startDelay) {
-    super.setStartDelay(startDelay);
     this.startDelaySet = Long.valueOf(startDelay);
   }
 
@@ -302,7 +314,6 @@ public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpl
   @Override
   public void setBeanName(String beanName) {
     this.beanName = beanName;
-    super.setBeanName(beanName);
   }
 
   @Override
@@ -352,17 +363,6 @@ public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpl
   }
 
   @Override
-  public void afterPropertiesSet() throws ParseException {
-    if (startTimeSpringPropertyInjectionSignal.getCount() > 0) {
-      startTimeSpringPropertyInjectionSignal.countDown();
-    }
-    if (endTimeSpringPropertyInjectionSignal.getCount() > 0) {
-      endTimeSpringPropertyInjectionSignal.countDown();
-    }
-    super.afterPropertiesSet();
-  }
-
-  @Override
   public String getJobType() {
     return jobType;
   }
@@ -379,4 +379,39 @@ public class YHDSimpleTriggerBean extends SimpleTriggerBean implements IYHDSimpl
   public void setRunShellPath(String runShellPath) {
     this.runShellPath = runShellPath;
   }
+
+  public void setJobDetail(JobDetail jobDetail) {
+    this.jobDetail = jobDetail;
+  }
+
+  public void setJobDataMap(JobDataMap jobDataMap) {
+    this.jobDataMap = jobDataMap;
+    super.setJobDataMap(jobDataMap);
+  }
+
+  @Override
+  public void afterPropertiesSet() throws ParseException {
+    if (startTimeSpringPropertyInjectionSignal.getCount() > 0) {
+      startTimeSpringPropertyInjectionSignal.countDown();
+    }
+    if (endTimeSpringPropertyInjectionSignal.getCount() > 0) {
+      endTimeSpringPropertyInjectionSignal.countDown();
+    }
+
+    if (name == null) {
+      super.setName(beanName);
+    }
+
+    if (this.group == null) {
+      this.group = Scheduler.DEFAULT_GROUP;
+    }
+    super.setGroup(this.group);
+
+    if (this.jobDetail != null) {
+      this.jobDataMap.put(KiraCommonConstants.JOB_DETAIL_KEY, this.jobDetail);
+      super.setJobDataMap(this.jobDataMap);
+      super.setJobKey(this.jobDetail.getKey());
+    }
+  }
+
 }

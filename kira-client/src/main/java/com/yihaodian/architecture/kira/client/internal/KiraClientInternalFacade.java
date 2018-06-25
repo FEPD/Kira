@@ -53,7 +53,6 @@ import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.quartz.JobDetailAwareTrigger;
 
 public class KiraClientInternalFacade implements IKiraClientInternalFacade {
 
@@ -225,8 +224,8 @@ public class KiraClientInternalFacade implements IKiraClientInternalFacade {
     String targetMethod = null;
     String targetMethodArgTypes = null;
     String argumentsAsJsonArrayString = null;
-    if (yhdTriggerBean instanceof JobDetailAwareTrigger) {
-      JobDetail jobDetail = ((JobDetailAwareTrigger) yhdTriggerBean).getJobDetail();
+    if (yhdTriggerBean instanceof Trigger) {
+      JobDetail jobDetail = (JobDetail) ((Trigger) yhdTriggerBean).getJobDataMap().get(KiraCommonConstants.JOB_DETAIL_KEY);
       targetMethod = (String) jobDetail.getJobDataMap()
           .get(KiraClientConstants.JOBDATAMAP_KEY_TARGETMETHOD);
       String[] argTypes = (String[]) jobDetail.getJobDataMap()
