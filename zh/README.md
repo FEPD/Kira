@@ -17,7 +17,7 @@
         * Kira-Server
         * Kira-Schedule
     * Mysql
-    * Kira-cluster(对外提供接入Kira的Jar包)  
+    * Kira-client(对外提供接入Kira的Jar包)  
  
 * Kira 系统模块
  
@@ -29,12 +29,11 @@
 
 * 系统总体流程如下：
 
-    * a)	定时任务相关pool使用kira-client公共组件进行接入。
-    * b)	使用kira-client公共组件接入的pool 系统启动后，其相关的定时任务配置被注册到Zookeeper Cluster上，并且对外暴露了Kira-client组件提供的Hedwig服务，该服务用于被Kira-manager远程调用触发执行pool的业务方法。
-    * c)	Kira-manger 集群能感知到注册的定时任务，把相关的定时任务信息保存到数据库，并根据定时任务的配置进行调度和管理。当定时任务的触发时间到了以后，远程调用执行定时任务对应的pool所暴露的上述Kira-clieng组件提供的Hedwig服务，进而触发执行pool的业务方法。
-    * d)	Pool在其业务方法执行前后，kira-client组件将会把任务执行状态信息通过Jumper消息中间件上报给kira-manager集群进行保存。
-    * e)	各方通过使用Kira-manger 集群提供的web管理界面进行日常定时任务管理操作。
-
+  * a)业务的应用使用kira-client公共组件进行接入
+  * b)	使用kira-client公共组件接入的应用系统启动后，其相关的定时任务配置被注册到Zookeeper Cluster上，并且对外暴露了Kira-client组件提供的Hedwig服务，该服务用于被Kira-manager远程调用触发执行应用的业务方法
+  * c)	Kira-manager 集群能感知到注册的定时任务，把相关的定时任务信息保存到数据库，并根据定时任务的配置进行调度和管理。当定时任务的触发时间到了以后，远程调用执行定时任务对应的应用所暴露的上述Kira-client组件提供的Hedwig服务，进而触发执行应用的业务方法
+  * d)	应用在其业务方法执行前后，kira-client组件将会把任务执行状态信息通过Akka Actor上报给kira-manager集群进行保存
+  * e)	各方通过使用Kira-manager 集群提供的web管理界面进行日常定时任务管理操作
 
 ### 功能
 
