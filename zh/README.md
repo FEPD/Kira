@@ -8,7 +8,7 @@
 
 ### 整体架构
 
-![Kira_architecture](../kira-manager/src/main/resources/files/Kira_architecture.jpg)
+![Kira_architecture](https://raw.githubusercontent.com/FEPD/Kira/2.0-version/kira-manager/src/main/resources/files/kira_architecture.jpg)
 
  * Kira 包括下面组件：
     * zookeeper 集群
