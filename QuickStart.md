@@ -191,7 +191,7 @@
     <property name="onlyRunOnSingleProcess" value="true" />
     <property name="scheduledLocally" value="false" />
     <property name="disabled" value="false" />
-    <property name="locationsToRunJob" value="192.168.35.100:8080,192.168.35.200:80" />
+    <property name="locationsToRunJob" value="ip:8080,ip:80" />
  <!-- <property name="locationsToRunJob" value="empty" /> -->
  </bean>
  ```
@@ -352,7 +352,7 @@
     <property name="sendAlarmEmail" value="true" />
     <property name="emailsToReceiveAlarm" value="aaa@jd.com,bbb@jd.com" />
     <property name="sendAlarmSMS" value="true" />
-    <property name="phoneNumbersToReceiveAlarmSMS" value="13812345678,13888888888" />
+    <property name="phoneNumbersToReceiveAlarmSMS" value="xxxxxx,13888888888" />
  </bean>
  ```
  
