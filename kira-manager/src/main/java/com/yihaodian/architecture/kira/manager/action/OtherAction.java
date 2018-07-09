@@ -14,10 +14,10 @@
  */
 package com.yihaodian.architecture.kira.manager.action;
 
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.common.HandleResult;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.util.KiraUtil;
 import com.yihaodian.architecture.kira.common.util.KiraZkUtil;
 import com.yihaodian.architecture.kira.manager.criteria.OtherCriteria;

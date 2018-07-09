@@ -15,10 +15,10 @@
 package com.yihaodian.architecture.kira.manager.core.schedule.timertrigger.scheduler;
 
 import com.caucho.hessian.client.HessianRuntimeException;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.common.CustomizedThreadFactory;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.TriggerIdentity;
 import com.yihaodian.architecture.kira.common.exception.KiraHandleException;
 import com.yihaodian.architecture.kira.common.monitor.MonitorContext;

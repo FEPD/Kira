@@ -16,6 +16,7 @@ package com.yihaodian.architecture.kira.client.internal;
 
 import com.alibaba.fastjson.JSON;
 import com.yihaodian.architecture.hedwig.common.dto.ServiceProfile;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.client.internal.iface.IYHDCronTriggerBean;
 import com.yihaodian.architecture.kira.client.internal.iface.IYHDSimpleTriggerBean;
 import com.yihaodian.architecture.kira.client.internal.iface.IYHDTriggerBean;
@@ -33,7 +34,6 @@ import com.yihaodian.architecture.kira.common.HandleResult;
 import com.yihaodian.architecture.kira.common.JobTypeEnum;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.TriggerMetadataDetail;
 import com.yihaodian.architecture.kira.common.TriggerTypeEnum;
 import com.yihaodian.architecture.kira.common.dto.KiraClientRegisterData;

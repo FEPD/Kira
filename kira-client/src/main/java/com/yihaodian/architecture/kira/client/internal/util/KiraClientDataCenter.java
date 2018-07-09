@@ -15,6 +15,7 @@
 package com.yihaodian.architecture.kira.client.internal.util;
 
 import com.yihaodian.architecture.hedwig.common.util.HedwigUtil;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.hedwig.provider.AppProfile;
 import com.yihaodian.architecture.kira.client.internal.bean.Job;
 import com.yihaodian.architecture.kira.client.internal.impl.YHDLocalProcessEnvironment;
@@ -23,7 +24,6 @@ import com.yihaodian.architecture.kira.client.util.CentralScheduleServiceExporte
 import com.yihaodian.architecture.kira.client.util.KiraClientConfig;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.TriggerIdentity;
 import com.yihaodian.architecture.kira.common.TriggerMetadataDetail;
 import com.yihaodian.architecture.kira.common.dto.KiraClientRegisterData;

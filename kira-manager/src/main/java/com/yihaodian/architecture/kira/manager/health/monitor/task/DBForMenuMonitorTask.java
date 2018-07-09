@@ -14,7 +14,7 @@
  */
 package com.yihaodian.architecture.kira.manager.health.monitor.task;
 
-import com.yihaodian.architecture.kira.common.SystemUtil;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.common.monitor.MonitorContext;
 import com.yihaodian.architecture.kira.common.monitor.MonitorNoticeInfo;
 import com.yihaodian.architecture.kira.manager.health.event.DBForMenuRecoveredEvent;

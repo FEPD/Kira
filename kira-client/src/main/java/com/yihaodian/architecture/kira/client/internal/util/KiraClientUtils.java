@@ -15,6 +15,7 @@
 package com.yihaodian.architecture.kira.client.internal.util;
 
 import com.yihaodian.architecture.hedwig.common.dto.ServiceProfile;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.hedwig.provider.AppProfile;
 import com.yihaodian.architecture.kira.client.akka.ProducerMessageActor;
 import com.yihaodian.architecture.kira.client.internal.bean.Job;
@@ -24,7 +25,6 @@ import com.yihaodian.architecture.kira.common.HandleResult;
 import com.yihaodian.architecture.kira.common.JobStatusEnum;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.dto.JobItemRunRequest;
 import com.yihaodian.architecture.kira.common.dto.JobItemStatusReport;
 import com.yihaodian.architecture.kira.common.dto.KiraTimerTriggerBusinessRunningInstance;

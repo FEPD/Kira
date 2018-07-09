@@ -15,10 +15,10 @@
 package com.yihaodian.architecture.kira.manager.service.impl;
 
 import com.yihaodian.architecture.hedwig.common.dto.ServiceProfile;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.common.HandleResult;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.TriggerIdentity;
 import com.yihaodian.architecture.kira.common.TriggerTypeEnum;
 import com.yihaodian.architecture.kira.common.dto.KiraTimerTriggerBusinessRunningInstance;

@@ -21,7 +21,7 @@ import akka.actor.Props;
 import akka.actor.Scheduler;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.yihaodian.architecture.kira.common.SystemUtil;
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.common.akka.constants.Constants;
 import com.yihaodian.architecture.kira.common.akka.constants.PhotonPropKeys;
 import com.yihaodian.architecture.kira.common.akka.entrypoint.AckActor;

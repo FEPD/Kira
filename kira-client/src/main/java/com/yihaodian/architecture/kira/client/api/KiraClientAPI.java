@@ -15,6 +15,7 @@
 
 package com.yihaodian.architecture.kira.client.api;
 
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.client.internal.util.CentralScheduleServiceContextHolder;
 import com.yihaodian.architecture.kira.client.internal.util.KiraClientDataCenter;
 import com.yihaodian.architecture.kira.client.internal.util.KiraClientRoleEnum;
@@ -25,7 +26,6 @@ import com.yihaodian.architecture.kira.client.util.KiraTimerTriggerBusinessRunni
 import com.yihaodian.architecture.kira.client.util.TriggerMetadataClientSideView;
 import com.yihaodian.architecture.kira.common.KiraCommonConstants;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.TriggerTypeEnum;
 import com.yihaodian.architecture.kira.common.dto.KiraTimerTriggerBusinessRunningInstance;
 import com.yihaodian.architecture.kira.common.exception.KiraHandleException;

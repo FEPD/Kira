@@ -35,6 +35,7 @@ import com.yihaodian.architecture.zkclient.ZkClient;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,8 @@ public class ProducerMessageActor {
   private static String rootPath = "akka.tcp://YHDendpointSystem@";
   private static String endPath = ":2552/user/";
   private static int retryTime = 5;
+  private static CountDownLatch waitServerRegister = new CountDownLatch(1);
+
 
   public ProducerMessageActor() {
 
@@ -76,11 +79,13 @@ public class ProducerMessageActor {
 
     HostInfo hi = rbBanlancer.select();
     if (hi == null) {
-      initBalancer();
-      hi = rbBanlancer.select();
-      if (hi == null) {
-        throw new NullPointerException(
-            "Can not Find Kira Server IP, discard this message ! " + content);
+      try {
+        waitServerRegister.await();
+        hi = rbBanlancer.select();
+      } catch (InterruptedException e) {
+        logger.warn("Can not Find Kira Server IP, discard this message ! " + content);
+      }finally {
+        waitServerRegister = null;
       }
     }
 
@@ -109,7 +114,7 @@ public class ProducerMessageActor {
             logger.error("client send data fail retry 5 time! " + content.toString());
           }
           logger
-              .warn("client send content fail === " + content + "====retry time ===" + count.get());
+              .warn("client send content fail:  " + content + ", retry time : " + count.get());
         }
       }, ec);
 
@@ -125,27 +130,15 @@ public class ProducerMessageActor {
   public static void initBalancer() {
 
     List<String> kiraServerList = KiraUtil.kiraServer();
-    if (kiraServerList == null || kiraServerList.isEmpty()) {
-      for (int count = 1; count < retryTime; count++) {
-        try {
-          Thread.sleep(5000);
-          kiraServerList = KiraUtil.kiraServer();
-          if (kiraServerList != null || !kiraServerList.isEmpty()) {
-            break;
-          }
-        } catch (InterruptedException e) {
-          Thread.currentThread().interrupt();
-          e.printStackTrace();
-        }
+    if ( !kiraServerList.isEmpty()) {
+       waitServerRegister.countDown();
+      Map<String, HostInfo> map = new ConcurrentHashMap<String, HostInfo>();
+      for (String connct : kiraServerList) {
+        HostInfo h = new HostInfo(connct);
+        map.put(connct, h);
       }
+      rbBanlancer.updateProfiles(map.values());
     }
-
-    Map<String, HostInfo> map = new ConcurrentHashMap<String, HostInfo>();
-    for (String connct : kiraServerList) {
-      HostInfo h = new HostInfo(connct);
-      map.put(connct, h);
-    }
-    rbBanlancer.updateProfiles(map.values());
   }
 
   public static void observeKiraServer() {

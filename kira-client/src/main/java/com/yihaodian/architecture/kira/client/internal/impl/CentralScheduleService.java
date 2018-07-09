@@ -14,6 +14,7 @@
  */
 package com.yihaodian.architecture.kira.client.internal.impl;
 
+import com.yihaodian.architecture.hedwig.common.util.SystemUtil;
 import com.yihaodian.architecture.kira.client.internal.bean.Job;
 import com.yihaodian.architecture.kira.client.internal.bean.JobItem;
 import com.yihaodian.architecture.kira.client.internal.util.KiraClientConstants;
@@ -28,7 +29,6 @@ import com.yihaodian.architecture.kira.common.JobItemRunContextData;
 import com.yihaodian.architecture.kira.common.JobItemRunTask;
 import com.yihaodian.architecture.kira.common.JobStatusEnum;
 import com.yihaodian.architecture.kira.common.KiraCommonUtils;
-import com.yihaodian.architecture.kira.common.SystemUtil;
 import com.yihaodian.architecture.kira.common.TriggerIdentity;
 import com.yihaodian.architecture.kira.common.dto.JobCancelRequest;
 import com.yihaodian.architecture.kira.common.dto.JobItemRunRequest;
