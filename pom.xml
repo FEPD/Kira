@@ -32,7 +32,7 @@
 		<maven-source-plugin.version>2.4</maven-source-plugin.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring.version>4.3.10.RELEASE</spring.version>
+    <spring.version>4.3.18.RELEASE</spring.version>
 		<struts2-core.version>2.0.12</struts2-core.version>
 		<ognl.version>2.6.11</ognl.version>
 		<struts2-spring-plugin.version>2.0.12</struts2-spring-plugin.version>
