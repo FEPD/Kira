@@ -5,11 +5,11 @@
   <parent>
     <artifactId>kira-scheduler</artifactId>
     <groupId>com.yihaodian.architecture</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <groupId>com.yihaodian.architecture</groupId>
   <artifactId>kira-time-scheduler</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <dependencies>
     <dependency>
